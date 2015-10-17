@@ -14,7 +14,7 @@ Each chapter of this book is targeting a different crucial task related to Linke
 ## Why this book
 There are many resources about Linked Data and semantic web technologies in the web. Because this topic is about more than 10 years of intense reseach, it is frequent to find Internet a lot of good quality resources that are not update with the recent web evolution and/or link dead pages. So I decided to start from the great work made by the Euclid project (that now is complete but no more maintained) to collect fresh things and to contribute to build a solid learaning base for [LinkedData.Center](http://LinkedData.Center) customers.
 
-This book is intended to be lightweight in size (so you can easily download and shared it) so I removed all video contribs (that where embedded  in original Euclid release). In next release will try to reintroduce some Youtube videos. The size of first compiled ePub release is now 20MB.
+This book is intended to be lightweight in size (so you can easily download and shared it); for this reason I removed all videos that where embedded in the original Euclid release. In next release will try to reintroduce some Youtube. The size of first compiled ePub release is now 20MB.
 
 This is a collaborative project, please fill free to add contributions and signal typo and other errors. The  compiled e-book, last version,  can be downloaded by free from the [download area of LinkedData.Center](http://subscriptions.linkeddata.center/downloads) (registration required)
 
