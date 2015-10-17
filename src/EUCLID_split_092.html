@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h1 id="calibre_toc_31" class="calibre2">
+	<strong class="calibre80"><a class="calibre11" id="part5"></a>Part 5: Using Web APIs</strong></h1>
+<h2 id="calibre_toc_112" class="calibre7">
+	5.16 HTTP communication</h2>
+<p class="calibre1">If a Linked Data application is built on the web then it may use Web APIs to either provide data or consume data from other sources. The HTTP protocol is the fundamental technology on which Web APIs are built. The serving of documents on the Web (for example the serving of an HTML page to a web browser) is carried out using the HTTP protocol.</p>
+<p class="calibre1"><em class="calibre8">HTTP communication</em> is based on an interaction that involves a series of requests and responses. A client sends a request to a server. The server sends back a response to the client.</p>
+<p class="calibre1"><img src="chapter5_image067.png" class="calibre177"/></p>
+<p class="calibre1"><em class="calibre8">Figure 34: Request-Response interaction.</em></p>
+<h3 id="calibre_toc_213" class="calibre13">
+	5.16.1 HTTP Request</h3>
+<p class="calibre1">Each HTTP request contains a method, URI, Header and optionally a body. The <em class="calibre8">method </em>indicates the type of the request that the server should perform. The most familiar types of HTTP request are <em class="calibre8">GET</em> and <em class="calibre8">POST</em>. A GET request means the client wants to retrieve content. The URI sent with the GET request is the resource from which the content should be retrieved. A POST request is used to send data. The accompanying URI indicates where the data should be sent. Web forms generally use POST requests to send data to the server.</p>
+<p class="calibre1">The other types of HTTP request are used more broadly in web-based client-server communication but not necessarily important when using a web-browser to retrieve and send content. A <em class="calibre8">PUT</em> request to used to store data at the specified URI. A <em class="calibre8">DELETE</em> request is used to delete the specified URI.</p>
+<p class="calibre1">Other types of HTTP request include HEAD, TRACE, CONNECT, OPTIONS and PATCH. For example, a <em class="calibre8">HEAD</em> request is used to retrieve header information. A <em class="calibre8">TRACE</em> request is used to allow the client to see what the server is receiving. This is generally used for diagnostics.</p>
+<p class="calibre1">As well as the method and URI a HTTP request contains <em class="calibre8">header</em> information that gives additional detail about the HTTP request. A <em class="calibre8">body</em> is required with POST and PUT methods and expresses the data that is to be sent to, or stored at the specified URI. For example, if you submit a web form, then the data entered into the form can be represented in the body of the HTTP request.</p>
+<h3 id="calibre_toc_214" class="calibre13">
+	5.16.2 HTTP Response</h3>
+<p class="calibre1">A response to a HTTP request contains a numerical response code, a header and optionally a body. The <em class="calibre8">response code</em> gives overall status information on how the request is being handled. The response code is a three digit number beginning with a 1, 2, 3, 4 or 5. Response codes beginning with 1 are provisional responses indicating that the request has been received and is being acted upon.</p>
+<p class="calibre1">Requests starting with 2 indicate that the request has been successfully received, understood and accepted by the server. Codes beginning with 3 indicate that further action needs to be taken by the client that issued the initial request. Codes beginning with 4 indicate that the request is erroneous and cannot be met by the server. The most commonly seen response code beginning with 4 is the 404 response code. The 404 response code informs the client that the request was erroneous because it asked for a resource that does not exist on the server. Finally, codes beginning with 5 indicate that there is an error, but in this case the problem is with the server and it is unable to fulfil the valid request. </p>
+<h3 id="calibre_toc_215" class="calibre13">
+	5.16.3 HTTP Request Response pattern</h3>
+<p class="calibre1">We can now put the request and response together to illustrate the HTTP request-response pattern, in which a client requests and then receives web page. The client issues a GET request with the URI for the Wikipedia page about The Beatles. This tells the server that the client wants to retrieve information from the provided URI. The final response from the server has a response code 200 (indicating that the request has succeeded) and returns the HTML page about The Beatles.</p>
+<p class="calibre1"><img src="chapter5_image069.png" class="calibre178"/></p>
+<p class="calibre1"><em class="calibre8">Figure 35: The HTTP request-response pattern.</em></p>
+<h3 id="calibre_toc_216" class="calibre13">
+	5.16.4 HTTP content negotiation</h3>
+<p class="calibre1">When requesting data in a particular media from DBpedia rather than Wikipedia, the communication pattern between client and server is more complex. In this case the URI refers to the concept of The Beatles rather than any particular document describing The Beatles. As shown below, the request uses the method GET and declares that a response is required in HTML format. The URI refers to the concept of The Beatles, which is not a resource in HTML format. The server responds with a code of 303 and another URI. This tells the client to instead make a request for HTML from this alternative URI. The client then makes a second request (not shown) for HTML using the new URI and receives a HTML page about The Beatles with a response code of 200.</p>
+<p class="calibre1"><img src="chapter5_image071.png" class="calibre179"/></p>
+<p class="calibre1"><em class="calibre8">Figure 36: Content negotiation when requesting HTML using a Linked Data URI.</em></p>
+<p class="calibre1">In the above HTTP conversation the client requested information in a certain format using a particular URI. The server responded with an alternative URI. The client then made a second request with the new URI. The server responded with the requested information. This conversation between client and server to determine the correct resource is called <em class="calibre8">content negotiation</em> and is often abbreviated to <em class="calibre8">conneg</em>.</p>
+<p class="calibre1">The reason this conversation to determine the appropriate content is required is that different types of content can potentially be returned associated with the same resource. If information is being accessed via a web browser, then HTML is likely to be the preferred format. If the client is a Linked Data application consuming data, then the requested information about The Beatles will be preferred in an RDF format such as Turtle (see chapter 1 for more information about the Turtle format). In the figure below we have a GET request using the same URI as in the HTML example above. However, this time the client requests text/turtle rather than text/html. The server responds with the status code 303 (i.e. see other) and a URI where the information can be accessed in Turtle format.</p>
+<p class="calibre1"><img src="chapter5_image073.png" class="calibre179"/></p>
+<p class="calibre1"><em class="calibre8">Figure 37: Requesting data in Turtle format</em></p>
+<p class="calibre1">The client then issues a second request and this time retrieves the data in Turtle format along with a status code of 200. This approach is routinely used to publish Linked Data, in which a series of URIs name concepts used in the Linked Data application, such as The Beatles and Paul McCartney. Requests for data to a Linked Data URI are directed to another URI depending on the data format requested. Multiple RDF formats of the same data may be made available such as RDF/XML and Turtle.</p>
+<p class="calibre1"><img src="chapter5_image075.png" class="calibre180"/></p>
+<p class="calibre1"><em class="calibre8">Figure 38: Retrieving data in Turtle format.</em></p>
+</body></html>

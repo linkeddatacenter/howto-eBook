@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_52" class="calibre9">
+	Reasoning over linked data</h2>
+<p class="calibre1">Reasoning enhances the information contained in a dataset by including results obtained by inference from the triples already present. As a simple example, suppose that the dataset includes the following triples, shown here in Turtle (assume the usual prefixes):</p>
+<pre class="calibre16">dbpedia:The_Beatles a mo:MusicGroup .
+mo:MusicGroup rdfs:subClassOf mo:MusicArtist .
+</pre>
+<p class="calibre1">Recall that the predicate <span class="calibre28">a</span> in the first triple is Turtle shorthand for <span class="calibre28">rdf:type</span>, denoting class membership. Now, suppose that we submit the following SELECT query designed to retrieve all triples in which the Beatles occur as subject:</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+
+SELECT *
+WHERE { dbpedia:The_Beatles ?predicate ?object }
+</pre>
+<p class="calibre1">Assuming there are no other relevant triples, the response to this query under a regime with <i class="calibre8">no entailment</i> will be the following single-row table:</p>
+<table border="1" class="calibre24">
+	<tbody class="calibre25">
+		<tr class="calibre26">
+			<td class="calibre27">
+				<b class="calibre18">?predicate</b></td>
+			<td class="calibre27">
+				<b class="calibre18">?object</b></td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				a</td>
+			<td class="calibre27">
+				mo:MusicGroup</td>
+		</tr>
+	</tbody>
+</table>
+<p class="calibre1">An obvious inference has been missed here, since if every music group is a music artist (as asserted by the second triple), the Beatles will also be a music artist. (It might sound odd to call a group an artist, but this is how the information is encoded in the Music Ontology.) If we execute the query on an engine that implements the RDFS entailment regime (a set of rules governing inference based on RDFS resources like <span class="calibre28">rdfs:subClassOf</span>), the output table will be enriched by a second variable binding inferred with the aid of the second triple.</p>
+<table border="1" class="calibre24">
+	<tbody class="calibre25">
+		<tr class="calibre26">
+			<td class="calibre27">
+				<b class="calibre18">?predicate</b></td>
+			<td class="calibre27">
+				<b class="calibre18">?object</b></td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				a</td>
+			<td class="calibre27">
+				mo:MusicGroup</td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				a</td>
+			<td class="calibre27">
+				mo:MusicArtist</td>
+		</tr>
+	</tbody>
+</table>
+<p class="calibre1">This is a very simple case, but in general the formulation of workable entailment regimes is a complex task, still under investigation and discussion. One hard problem is what to do if the dataset is inconsistent, since a well-known result of logic states that from a contradiction, <i class="calibre8">anything</i> can be inferred. (This follows from the definition of material implication, for which the truth-conditions state that if the antecedent is false, the implication holds whatever the consequent. Hence a contradiction, being false by definition, implies any statement whatever.)</p>
+<p class="calibre1">Another problem is that some queries might return an <i class="calibre8">infinite</i> set of solutions. For instance, there is a convention in RDF that allows for a family of predicates <span class="calibre28">rdf:_1</span>, <span class="calibre28">rdf:_2</span>, etc. ending in any positive integer; such predicates are used when constructing lists. This means that if all possible inferences are performed, a query of the form <span class="calibre28">?x rdf:type rdf:Property</span> (intuitively, return all properties) would yield an infinite set.</p>
+<p class="calibre1">For practical purposes we can ignore such cases, but they illustrate that that query engines may not always return all the entailments that one might expect.</p>
+<p class="calibre1">In the rest of this section we look first at typical entailments that arise from RDFS, and then at the much richer entailments that can result from an ontology in OWL.</p>
+
+<h3 id="calibre_toc_188" class="calibre13">
+	Reasoning using RDFS</h3>
+<p class="calibre1">RDF Schema introduces a very limited range of logical terms based mostly on the concept of class, or <span class="calibre28">rdfs:Class</span>, a concept absent from RDF. It is possible to state directly that a resource denotes a class, using a triple such as the following (to save space we omit prefixes):</p>
+<pre class="calibre16">mo:MusicGroup rdf:type rdfs:Class .
+</pre>
+<p class="calibre1">We have already seen an example of the predicate <span class="calibre28">rdfs:subClassOf</span>, through which we can assert that the resource in subject position is a subclass of the resource in object position – a relationship often expressed in English by sentences of the form <i class="calibre8">All X are Y</i> (e.g., "All pianists are musicians"). A similar predicate is provided for properties rather than classes, illustrated by the following triple in which subject, predicate and object are all property resources:</p>
+<pre class="calibre16">ex:hasSinger rdfs:subPropertyOf ex:hasPerformer .
+</pre>
+<p class="calibre1">This means that if a subject and object are related by the <span class="calibre28">ex:hasSinger</span> predicate, they must also be related by the <span class="calibre28">ex:hasPerformer</span> predicate. Note that even though these are properties, they may occur in subject and object position – in other words, we can make statements about properties, as well as using them to express relationships among other resources. Two important facts about any property are its <i class="calibre8">domain</i> and <i class="calibre8">range</i>, which constrain the resources that can be employed in subject and object position when the property is used as a predicate; these can also be defined using RDFS resources, as follows:</p>
+<pre class="calibre16">ex:hasSinger rdfs:domain mo:Performance .
+ex:hasSinger rdfs:range foaf:Agent .
+</pre>
+<p class="calibre1">This means that any resource occurring as subject of <span class="calibre28">ex:hasSinger</span> must belong to the class <span class="calibre28">mo:Performance</span> (only performances have singers), while any resource occurring as object of <span class="calibre28">ex:hasSinger</span> must belong to the class <span class="calibre28">foaf:Agent</span> (only agents are singers).</p>
+<h3 id="calibre_toc_189" class="calibre13">
+	RDFS entailment rules</h3>
+<p class="calibre1">The RDFS entailment regime is defined by thirteen rules, which are listed <a href="http://www.w3.org/TR/rdf-mt/#rules">here</a>. In brief, their import is as follows:</p>
+<dl class="calibre1">
+	<dt class="calibre10">
+		<b class="calibre18">rdfs1</b></dt>
+	<dd class="calibre19">
+		Allocates a blank node to a literal, and classifies this node as a member of the class <span class="calibre28">rdfs:Literal</span>.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs2</b></dt>
+	<dd class="calibre19">
+		Uses a <span class="calibre28">rdfs:domain</span> statement to classify a resource found in subject position (in a triple containing the relevant property as predicate).</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs3</b></dt>
+	<dd class="calibre19">
+		Uses a <span class="calibre28">rdfs:range</span> statement to classify a resource found in object position (in a triple containing the relevant property as predicate).</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs4</b></dt>
+	<dd class="calibre19">
+		Classifies a resource found in subject or object position in a triple as belonging to the class <span class="calibre28">rdfs:Resource</span>.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs5</b></dt>
+	<dd class="calibre19">
+		Inference based on the transitivity of <span class="calibre28">rdfs:subPropertyOf</span>.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs6</b></dt>
+	<dd class="calibre19">
+		Infers that any resource classified as a property is a sub-property of itself.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs7</b></dt>
+	<dd class="calibre19">
+		Uses a <span class="calibre28">rdfs:subPropertyOf</span> statement to infer that two resources are related by a property P if they are related by a subproperty of P.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs8</b></dt>
+	<dd class="calibre19">
+		Infers that any resource classified as a class is a subclass of <span class="calibre28">rdfs:Resource</span>.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs9</b></dt>
+	<dd class="calibre19">
+		Infers that a resource belongs to a class if it belongs to its subclass.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs10</b></dt>
+	<dd class="calibre19">
+		Infers that any class is a subclass of itself.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs11</b></dt>
+	<dd class="calibre19">
+		Uses the transitivity of <span class="calibre28">rdfs:subClassOf</span> to infer that the subclass of a class C is a subclass of the superclass of C.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs12</b></dt>
+	<dd class="calibre19">
+		Infers that any resource belonging to <span class="calibre28">rdfs:ContainerMembershipProperty</span> is a subproperty of <span class="calibre28">rdfs:member</span>.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs13</b></dt>
+	<dd class="calibre19">
+		Infers that any resource belonging to <span class="calibre28">rdfs:Datatype</span> is a subclass of <span class="calibre28">rdfs:Literal</span>.</dd>
+</dl>
+<p class="calibre1">In what follows, we look more closely at how these RDFS resources and their associated rules can support inferences when information is retrieved from a dataset.</p>
+<h3 id="calibre_toc_190" class="calibre13">
+	Inferring subclass and class membership relationships</h3>
+<p class="calibre1">We have already seen an example of an inference based on <span class="calibre28">rdfs:subClassOf</span>, which we repeat below omitting Prefix statements:</p>
+<pre class="calibre16">dbpedia:The_Beatles a mo:MusicGroup .
+mo:MusicGroup rdfs:subClassOf mo:MusicArtist .
+</pre>
+<p class="calibre1">The general form of this inference is that if a resource belongs to a class, which in turn belongs to a broader class, then the resource must also belong to this broader class (see rdfs9). This pattern will be familiar as a variant of the Aristotelian syllogism:</p>
+<blockquote class="calibre12">
+	Socrates is a man.<br class="calibre10"/>
+	All men are mortal.<br class="calibre10"/>
+	Therefore, Socrates is mortal.</blockquote>
+<p class="calibre1">A similar inference can be drawn from two subclass statements in which the object of one statement is the subject of the other (see rdfs11):</p>
+<pre class="calibre16">mo:MusicGroup rdfs:subClassOf mo:MusicArtist .
+mo:MusicArtist rdfs:subClassOf foaf:Agent .
+</pre>
+<p class="calibre1">If music groups are a subclass of music artists, who are in turn a subclass of agents, then music groups must be a subclass of agents. This corresponds to the so-called Barbara pattern of the syllogism:</p>
+<blockquote class="calibre12">
+	All Greeks are men.<br class="calibre10"/>
+	All men are mortal.<br class="calibre10"/>
+	Therefore, all Greeks are mortal.</blockquote>
+<h3 id="calibre_toc_191" class="calibre13">
+	Classifying a resource from its relationships to other resources</h3>
+<p class="calibre1">Suppose a dataset contains the following triple asserting that Paul McCartney belongs to the Beatles:</p>
+<pre class="calibre16">dbpedia:The_Beatles mo:bandMember dbpedia:Paul_McCartney .
+</pre>
+<p class="calibre1">Can we infer anything further about the resources in subject and object position? To a human, of course, it will be obvious from the resource names that the Beatles is a group, and that Paul McCartney is an agent, or more specifically a person. However, these names are meaningless to the query engine, which can only utilise information encoded in RDF triples. To put ourselves in this position, we could try using arbitrary IRIs, as in this version of the triple:</p>
+<pre class="calibre16">ex:X mo:bandMember ex:Y .
+</pre>
+<p class="calibre1">Even with subject and object anonymised in this way, a person could infer from the predicate that X will be a band, and Y a person. The query engine can perform this inference too if the dataset includes triples defining the domain and range of the property (see rdfs2 and rdfs3):</p>
+<pre class="calibre16">mo:bandMember rdfs:domain mo:MusicGroup ;
+              rdfs:range foaf:Agent .
+</pre>
+<p class="calibre1">(Remember the use of the semi-colon here to abbreviate two statements with the same subject.) If these triples are present in the dataset, and the query engine is deploying the RDFS entailment regime, then two further triples can be directly inferred:</p>
+<pre class="calibre16">ex:X a mo:MusicGroup .
+ex:Y a foaf:Agent .
+</pre>
+<p class="calibre1">A special case of this inference arises when a triple uses an RDFS predicate for which domain and range statements are <i class="calibre8">axiomatic</i>, meaning that they are defined in RDFS itself and need not be included in the dataset over which the query is run. Thus for <span class="calibre28">rdfs:subClassOf</span>, the following triples are axiomatic and need not be defined by developers:</p>
+<pre class="calibre16">rdfs:subClassOf rdfs:domain rdfs:Class .
+rdfs:subClassOf rdfs:range  rdfs:Class .
+</pre>
+<p class="calibre1">It follows that on encountering any subclass statement, the query engine can infer that its subject and object must be classes. Thus from –</p>
+<pre class="calibre16">mo:MusicGroup rdfs:subClassOf mo:MusicArtist .
+</pre>
+<p class="calibre1">– it can infer:</p>
+<pre class="calibre16">mo:MusicGroup a rdfs:Class .
+mo:MusicArtist a rdfs:Class .
+</pre>
+<h3 id="calibre_toc_192" class="calibre13">
+	Inferences based on sub-property relationships</h3>
+<p class="calibre1">Finally, whenever SP has been defined as a sub-property of P, it can be inferred that any subject and object having an SP relationship must also have the (broader) P relationship (see rdfs5):</p>
+<pre class="calibre16">ex:hasSinger rdfs:subPropertyOf ex:hasPerformer .
+ex:Yesterday ex:hasSinger dbpedia:PaulMcCartney .
+</pre>
+<p class="calibre1">From these two statements, the query engine may infer:</p>
+<pre class="calibre16">ex:Yesterday ex:hasPerformer dbpedia:PaulMcCartney .
+</pre>
+<p class="calibre1">Such inferences are common when a dataset uses RDFS to organise classes and properties into <i class="calibre8">hierarchies</i>. Thus classes like Corgi, Dog, Canine, Mammal, Animal, Living thing, comprise an obvious hierarchy in which membership of any class implies membership of all its superclasses; as we have just shown, a similar hierarchical organisation can be defined for properties.</p>
+<h3 id="calibre_toc_193" class="calibre13">
+	More advanced inferences</h3>
+<p class="calibre1">Compared with OWL, RDFS has two main limitations: (a) it provides no operators for constructing complex classes or properties out of simpler ones (e.g., "artist that belongs to at least two bands" from artist, band, and member-of); (b) it lacks some important resources for describing the logical properties of classes and properties, such as disjointness (for classes) and inverse (for properties). Limitations of the second kind are particularly common when working with linked data, and it is worth illustrating some of them now, before we look in detail at OWL.</p>
+<p class="calibre1">Suppose that a dataset contains resources named <span class="calibre28">ex:Man</span> and <span class="calibre28">Woman</span>, both classes, which can be used for classifying resources that represent individual people:</p>
+<pre class="calibre16">dbpedia:Paul_McCartney a ex:Man .
+dbpedia:Cilla_Black a ex:Woman .
+</pre>
+<p class="calibre1">Now, suppose that in addition to these two triples, a third triple is either present in the dataset, or can be inferred:</p>
+<pre class="calibre16">dbpedia:Paul_McCartney a ex:Woman .
+</pre>
+<p class="calibre1">Plainly something has gone wrong here, and we would like a query engine capable of even elementary reasoning to signal an inconsistency. It might surprise you the learn that there is no way of doing this, because RDFS provides no predicate allowing you to state that men and women are disjoint (i.e., that no man is a woman, or nothing is both a man and a woman). The necessary predicate, <span class="calibre28">owl:disjointWith</span>, is found in OWL only, and allows statements such as the following:</p>
+<pre class="calibre16">ex:Man owl:disjointWith ex:Woman .
+</pre>
+<p class="calibre1">To give one more example, suppose that we introduce a property resource allowing us to state that one person is married to another. We might for instance apply it to the McCartneys:</p>
+<pre class="calibre16">dbpedia:Paul_McCartney ex:marriedTo dbpedia:Linda_McCartney .
+</pre>
+<p class="calibre1">Now, suppose that someone formulates the following query, corresponding to the question "Who is married to Paul McCartney?" (we omit PREFIX clauses as before):</p>
+<pre class="calibre16">SELECT ?person
+WHERE { ?person ex:marriedTo dbpedia:Paul_McCartney }
+</pre>
+<p class="calibre1">Obviously the answer should be "Linda McCartney", but this binding will not be found because the following triple is missing from the dataset:</p>
+<pre class="calibre16">dbpedia:Linda_McCartney ex:marriedTo dbpedia:Paul_McCartney .
+</pre>
+<p class="calibre1">To infer this we need a statement to the effect that if X is married to Y, Y must be married to X. In mathematics, this fact is expressed by saying that the property <span class="calibre28">ex:marriedTo</span> is <i class="calibre8">symmetric</i>. This can be stated directly using OWL, as follows:</p>
+<pre class="calibre16">ex:marriedTo a owl:SymmetricProperty .
+</pre>
+<p class="calibre1">No such resource exists in RDFS, so this kind of inference cannot be performed under an RDFS entailment regime.</p>
+<h3 id="calibre_toc_194" class="calibre13">
+	Reasoning using OWL</h3>
+<p class="calibre1">As a reminder, Figure 10 shows the location of the Web Ontology Language (OWL) in the Semantic Web stack. As can be seen, OWL depends on RDF and RDFS, from which it draws crucial resources such as <span class="calibre28">rdf:type</span> and <span class="calibre28">rdfs:Class</span>. Like RDFS, it can enhance the information in RDF datasets, accessible to SPARQL queries.</p>
+<p class="calibre1"><img src="semwebstack_0.png" alt="Web Generations" class="calibre15"/></p>
+<p class="calibre1"><em class="calibre8"><span class="calibre23">Figure 10: OWL in Semantic Web stack</span></em></p>
+<p class="calibre1">The current OWL standard OWL-2 is complex, providing for a number of fragments with different computational properties (see chapter 1). Most of these are subsets of OWL2-DL, the OWL description logic, but there is also a more expressive variant called OWL2-Full which ventures outside description logic. We will not try to cover all this material in this section. Instead, we look at some of the main logical resources in OWL2-DL from the viewpoint of their role in inference.</p>
+<h3 id="calibre_toc_195" class="calibre13">
+	Inferences based on characteristics of properties</h3>
+<p class="calibre1">We have illustrated in the last section an inference based on one of the property characteristics that can be represented in OWL, namely symmetry (if X p Y, then Y p X). A number of others are provided, of which the following are used most often:</p>
+<ul class="calibre3">
+	<li class="calibre4">
+		<b class="calibre18">Transitive</b> properties support the inference: if X p Y, and Y p Z, then X p Z. An example is the property "longer than" applied to track durations: if "Hey Jude" is longer than "Help", and "Help" is longer than "Yesterday", then we can infer that "Hey Jude" is longer than "Yesterday".</li>
+	<li class="calibre4">
+		<b class="calibre18">Functional</b> properties support the inference that if X p Y and X p Z, Y and Z must be identical: in other words, X can bear the relation p to only one thing. An example is the property "has mother", assuming that this means biological mother. To say that this property is functional means that a person can have at most one mother. Thus if Charles has Elizabeth as mother, and Charles also has Mrs Windsor as mother, then Elizabeth and Mrs Windsor are two names of the same person.</li>
+	<li class="calibre4">
+		<b class="calibre18">Inverse-functional</b> properties support the inference that if Y p X and Z p X, then Y and Z must be identical. An example would be the property "is mother of". Thus if Elizabeth is mother of Charles, and so is Mrs Windsor, then Elizabeth and Mrs Windsor are the same person.</li>
+	<li class="calibre4">
+		Two properties p1 and p2 are <b class="calibre18">inverse</b> if X p1 Y means exactly the same as Y p2 X (i.e., they are equivalent, and each can be inferred from the other). Thus in our last two examples, "has mother" and "is mother of" are inverse properties, since if Charles has mother Elizabeth, then Elizabeth is mother of Charles, and vice-versa.</li>
+</ul>
+<p class="calibre1">Let us see how these characteristics are used in practice, starting with a transtive property.</p>
+<pre class="calibre16">ex:locatedIn a owl:TransitiveProperty .
+ex:AbbeyRoadStudios ex:locatedIn ex:London .
+ex:London ex:locatedIn ex:UnitedKingdom .
+</pre>
+<p class="calibre1">Here the classification of <span class="calibre28">ex:locatedIn</span> as a transitive property allows a query engine with an OWL2-DL regime to draw the following inference in response to a query concerning the location of the Abbey Road Studio (or concerning what is located in the United Kingdom):</p>
+<pre class="calibre16">ex:AbbeyRoadStudios ex:locatedIn ex:UnitedKingdom .
+</pre>
+<p class="calibre1">Moving on to functional properties, consider this set of triples:</p>
+<pre class="calibre16">ex:hasFather a owl:FunctionalProperty .
+dbpedia:Julian_Lennon ex:hasFather dbpedia:John_Lennon .
+dbpedia:Julian_Lennon ex:hasFather ex:J_Lennon .
+</pre>
+<p class="calibre1">The classification of <span class="calibre28">ex:hasFather</span> as functional permits the inference that Julian Lennon can have only one father, and hence that the objects of the second and third triples must be co-referential. In OWL this is expressed using <span class="calibre28">owl:sameAs</span>:</p>
+<pre class="calibre16">dbpedia:John_Lennon owl:sameAs ex:J_Lennon .
+</pre>
+<p class="calibre1">Exactly the same inference can be drawn if the same information is presented using the inverse-functional property <span class="calibre28">ex:isFatherOf</span>:</p>
+<pre class="calibre16">ex:isFatherOf a owl:InverseFunctionalProperty .
+dbpedia:John_Lennon ex:isFatherOf dbpedia:Julian_Lennon .
+ex:J_Lennon ex:isFatherOf dbpedia:Julian_Lennon .
+</pre>
+<p class="calibre1">Note that <span class="calibre28">owl:sameAs</span> is symmetric, and also transitive; these characteristics are axiomatic in OWL, so they need not be specified by the ontology developer.</p>
+<p class="calibre1">Finally, if we include a triple stating that <span class="calibre28">ex:hasFather</span> and <span class="calibre28">ex:isFatherOf</span> are inverse, we obtain two ways of expressing fatherhood, with subject and object switched. Imagine for instance a dataset with just two triples –</p>
+<pre class="calibre16">ex:hasFather owl:inverseOf ex:isFatherOf .
+dbpedia:Julian_Lennon ex:hasFather dbpedia:John_Lennon .
+</pre>
+<p class="calibre1">– and suppose we run the following query (prefixes omitted) on who is the father of Julian Lennon:</p>
+<pre class="calibre16">SELECT ?person
+WHERE { ?person ex:isFatherOf dbpedia:Julian_Lennon }
+</pre>
+<p class="calibre1">Without OWL-based reasoning the query engine has no way of returning John Lennon as an answer to this query, but using the inverse property statement it can derive the following entailment:</p>
+<pre class="calibre16">dbpedia:John_Lennon ex:isFatherOf dbpedia:Julian_Lennon .
+</pre>
+<h3 id="calibre_toc_196" class="calibre13">
+	Inferences based on equivalence among terms</h3>
+<p class="calibre1">We have already seen an OWL property <span class="calibre28">owl:sameAs</span> which allows us to state that two IRIs name the same individual:</p>
+<pre class="calibre16">dbpedia:John_Lennon owl:sameAs ex:J_Lennon .
+</pre>
+<p class="calibre1">This property is very important in linked data, since it provides a means by which datasets with different naming conventions can be connected. OWL also provides predicates for stating that two classes, or two properties, have the same meaning, as follows:</p>
+<pre class="calibre16">mo:MusicArtist owl:equivalentClass ex:musician .
+foaf:made owl:equivalentProperty ex:creatorOf .
+</pre>
+<p class="calibre1">In essence we have three ways here of stating that two terms <i class="calibre8">mean the same thing</i>, and in each case inferences can be drawn from the fact that equivalence of meaning is <i class="calibre8">symmetric</i> and <i class="calibre8">transitive</i>. The practical consequence is that if a dataset already contains two names for John Lennon (say), owing to the <span class="calibre28">owl:sameAs</span> statement above, we can add a third name by relating it to only <i class="calibre8">one</i> of these names –</p>
+<pre class="calibre16">dbpedia:John_Lennon owl:sameAs new:JL666 .
+</pre>
+<p class="calibre1">– whereupon by symmetry and transitivity, a similar statement can be inferred for any subect-object pair drawn from these three names:</p>
+<pre class="calibre16">ex:J_Lennon owl:sameAs new:JL666 .
+new:JL666 owl:sameAs ex:J_Lennon .
+new:JL666 owl:sameAs dbpedia:John_Lennon .
+</pre>
+<p class="calibre1">Similarly, a single <span class="calibre28">owl:sameAs</span> statement introducing a <i class="calibre8">fourth</i> name will suffice to make it equivalent in meaning to any of the other three – and so on.</p>
+</body></html>

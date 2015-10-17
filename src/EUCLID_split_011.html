@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_44" class="calibre9">Exercise</h2>
+<p class="calibre1">Study the following RDF statements, expressed in the Turtle syntax, then attempt the exercises that follow.</p>
+<pre class="calibre16">@base &lt;http://LinkedData.Center/home/about#&gt; .
+@prefix org: &lt;http://www.w3.org/ns/org#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+
+vocab:ResearchProject rdfs:subClassOf foaf:Group .
+
+vocab:consortiumMember rdfs:subPropertyOf foaf:member .
+
+&lt;enrico&gt; a foaf:Person ;
+        foaf:givenName "Enrico" ;
+        foaf:familyName "Fagnoni" ;
+        org:headOf &lt;http://LinkedData.Center/&gt; .
+
+&lt;http://LinkedData.Center/&gt; a org:Organization ;
+        rdfs:label "LinkedData.Center company" ;
+        rdfs:comment "Linked Data as Service provider"@en,
+         "fornitore di servizi di Linked Data"@it .</pre>
+<ol class="calibre21">
+	<li class="calibre4">
+		Re-express the statements in NTriples (i.e. remove all prefixes and abbreviations to give full triples in absolute URIs).</li>
+	<li class="calibre4">
+		Add a resource representing yourself, attaching your name using the FOAF properties.</li>
+	<li class="calibre4">
+		Add a property to this resource asserting that you know Enrico (i.e. foaf:knows).</li>
+</ol>
+</body></html>

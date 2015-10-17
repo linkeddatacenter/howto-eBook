@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_41" class="calibre9">
+	Background standards</h2>
+<p class="calibre1">The technologies described in the previous section are implemented through a number of standard protocols and languages, with probably familiar acronyms like HTTP, URI, XML, RDF, RDFS, OWL, SPARQL. You can look up details of these standards as needed, but as background it is useful to know a little about each one, and in particular what they are for. The later standards in this list build on the earlier ones, so they are often described as a <i class="calibre8">stack</i> of languages, as shown in Figure 3.</p>
+<h3 id="calibre_toc_150" class="calibre13">
+	HTTP</h3>
+<p class="calibre1">From using the World Wide Web, most people are familiar with the HTTP prefix in front of web addresses such as http://musicbrainz.org/. The meaning of this acronym is HyperText Transfer Protocol, and it refers to a set of conventions governing communication between a client and a server. More precisely, these conventions define the structure of request messages from client to server, and response messages from server to client. Message structure varies from one protocol to another: thus a different protocol such as FTP (File Transfer Protocol) will define a different message structure. A request messages in HTTP consists essentially of a <i class="calibre8">method</i> to be applied to a <i class="calibre8">resource</i>. The fundamental method is GET, which requests the server to send back a representation of the resource, typically an HTML file that can be displayed in a browser pane. However, there are several other methods including DELETE, which deletes the resource, and POST, which submits data to be processed with respect to the resource. The resource, specified through a relative document ID (often a filename/path on the server), may be a document, or picture, or an executable that will generate data for the response.</p>
+<h3 id="calibre_toc_151" class="calibre13">
+	URI</h3>
+<p class="calibre1">A Uniform Resource Identifier (URI) is defined in the standard [4] as "a compact sequence of characters that identifies an abstract or physical resource". The word "compact" here means that the string must contain no space characters (or other white-space padding). "Abstract or physical" means that the URI may refer to an abstract resource such as the concepts "Beethoven" and "symphony", as well as to a document or other file that can be retrieved from the WWW.</p>
+<p class="calibre1">A URI that is linked to a retrievable resource is known also as a Uniform Resource Locator, or URL. For instance, the following URI for the MusicBrainz FAQ page is a URL:</p>
+<pre class="calibre16">http://musicbrainz.org/doc/Frequently_Asked_Questions
+</pre>
+<p class="calibre1">The definition of a correctly formed URI is quite complicated, with constituents that vary according to the <i class="calibre8">scheme</i> (the initial constituent before the colon), which specifies the relevant internet protocol, such as HTTP. For an HTTP URI, the other constituents most relevant for our purposes are the <i class="calibre8">authority</i>, and the <i class="calibre8">path</i>, which occur in that order. The authority specifies the server where the resource (if it really exists) is located. Finally, the path locates the resource precisely within the server's directory structure.</p>
+<p class="calibre1">Thus for the URL given above, "http" is the scheme, "musicbrainz.org" is the authority, and "/doc/Frequently_Asked_Questions" is the path; the other characters such as the colon are punctuation separating these constituents.</p>
+<p class="calibre1">Note that the constituents following the scheme will be different for different schemes: thus the "tel" scheme, for example, is followed simply by a telephone number. Here are some examples indicating this variety:</p>
+<pre class="calibre16">ldap://[2001:db8::7]/c=GB?objectClass?one
+mailto:John.Doe@example.com
+news:comp.infosystems.www.servers.unix
+tel:+1-816-555-1212
+telnet://192.0.2.16:80/
+urn:oasis:names:specification:docbook:dtd:xml:4.1.2
+http://dbpedia.org/resource/Karlsruhe
+</pre>
+<p class="calibre1">Since URIs are typically long, and hence difficult to read and write, it is convenient to make use of abbreviated forms known as "compact URIs" or "CURIEs". A compact URI consists simply of a namespace and a local name, separated by a colon. Typically, the namespace includes the scheme, the authority, and perhaps the early part of the path; the local name contains the remainder of the URI, chosen so as to convey intuitively what the URI means, while observing some syntactic restrictions (e.g., there should be no further use of the characters "/" and "#"). Thus in the example just given, one could introduce a namespace "dbp" for http://dbpedia.org/resource/, so reducing the URI to "dbp:Karlsruhe", where the local name preserves the substring that is significant to human readers. We will use this convenient method of abbreviation often in the rest of this book.</p>
+<h3 id="calibre_toc_152" class="calibre13">
+	XML</h3>
+<p class="calibre1">Extensible Markup Language (XML) is a refinement of Standard Generalised Markup Language (SGML), which was introduced in the 1980s as a meta-language suitable for defining particular mark-up languages -- for instance, languages for adding formatting information to documents. The basic concept, now well known from widespread use of HTML, is that labelled <i class="calibre8">tags</i> are placed around spans of text, thus indicating perhaps that the span should be formatted in italics:</p>
+<pre class="calibre16">&lt;i&gt;text in italics&lt;/i&gt;
+</pre>
+<p class="calibre1">The italic tag "i" is part of HTML, not SGML, but the convention of placing tags within angle brackets, and distinguishing the closing tag by a forward slash character, comes from SGML, as does the syntax for adding <i class="calibre8">attributes</i> to the opening tag, as in this example yielding <span class="calibre17">blue text</span>:</p>
+<pre class="calibre16">&lt;font color="blue"&gt;blue text&lt;/font&gt;
+</pre>
+<p class="calibre1">SGML is versatile because it can be used simply for encoding data, as well as for adding structure to text.</p>
+<p class="calibre1">In the mid-1990s, the newly formed World Wide Web Consortium (abbreviated W3C) set up a working group to simplify and rework SGML to meet the requirements of the WWW. The result was the first XML specification, which became a W3C recommendation in 1998, and has become the standard convention for data exchange over the web. The essential advance on SGML is that XML is simpler and stricter: to give just one example, it is permissible in SGML (but not in XML) to omit closing tags, as in the common practice of inserting &lt;p&gt; without a closing &lt;/p&gt; when writing HTML.</p>
+<h3 id="calibre_toc_153" class="calibre13">
+	RDF</h3>
+<p class="calibre1"><a href="semwebstack.png"><img src="semwebstack.png" alt="Stack of Languages" class="calibre5"/></a></p>
+<p class="calibre1"><em class="calibre8">Figure 3: Stack of Semantic Web Languages</em><br class="calibre10"/>
+	<em class="calibre8">Source: <a href="http://w3.org/DesignIssues/diagrams/sweb-stack/2006a.png">http://w3.org/DesignIssues/diagrams/sweb-stack/2006a.png</a></em><br class="calibre10"/>
+	<em class="calibre8">Citation: Semantic Web Language stack - architectural layers.</em><br class="calibre10"/>
+	<em class="calibre8">License: Copyright (c) 2006 World Wide Web Consortium, (Massachusetts Institute of Technology, European Research Consortium for Informatics and Mathematics, Keio University). All rights reserved. <a href="http://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231">http://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231</a></em></p>
+<p class="calibre1">The Resource Description Framework (RDF) was introduced originally as a data model for <i class="calibre8">metadata</i>, which are attributes of a document, or image, or program, etc. such as its author, date, location, and coding standards. First published as a W3C recommendation in 1999 [5], the framework has since been updated, and generalised in its purpose to cover not only metadata (strictly interpreted) but knowledge of all kinds.</p>
+<p class="calibre1">The basic idea of RDF is a very simple one: namely, that statements are represented as triples of the form <i class="calibre8">subject</i>--<i class="calibre8">predicate</i>--<i class="calibre8">object</i>, each triple expressing a relation (represented by the predicate resource) between the subject and object resources. Formally, the subject is expressed by a URI or a blank node, the predicate by a URI, and the object by a URI or a literal such as a number or string.</p>
+<p class="calibre1">The original W3C recommendation for exposing RDF data was that it should be encoded in XML syntax, sometimes called RDF/XML. It is for this reason that the semantic web "stack" of languages has RDF implemented on top of XML. However, notations have also been proposed which are easier for people to read and write, such as <i class="calibre8">Turtle</i>, in which statements are formed simply by listing the elements of the triple on a line, in the order subject-predicate-object, followed by a full stop, with URIs possibly shortened through the use of namespace abbreviations defined by "prefix" and "base" statements, as in the following example:</p>
+<pre class="calibre16">@base &lt;http://musicbrainz.org/&gt;.
+@prefix mo:&lt;http://purl.org/ontology/mo/&gt;.
+&lt;artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d#_&gt; a mo:MusicGroup.
+</pre>
+<p class="calibre1">Here the subject is abbreviated using the "base" statement, and the object is abbreviated using the "prefix" statement. The very simple predicate "a" relies on a further Turtle shorthand for very commonly used predicates, and refers to the "type" relation between a resource and its class. This can be seen from the following equivalent Turtle statement, in which all URIs are shown in their cumbersome unabbreviated form. Note that this statement should occupy a single line, although it is shown here with wrapping so that it fits on the page. The format in which every URI in a Turtle statement is fully expanded is also known as <i class="calibre8">NTriples</i>.</p>
+<pre class="calibre16">&lt;http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d#_&gt;
+  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt;
+  &lt;http://purl.org/ontology/mo/MusicGroup&gt;.
+</pre>
+<p class="calibre1">Where multiple statements apply to the same <i class="calibre8">subject</i>, they can be abbreviated by placing a semi-colon after the first object, and then giving further predicate-object pairs separated by semi-colons, with a full stop after the final pair. For statements having the same <i class="calibre8">subject and predicate</i>, objects can be listed in a similar way separated by commas. These conventions are illustrated by the following statements:</p>
+<pre class="calibre16">@base &lt;http://musicbrainz.org/&gt;.
+@prefix mo:&lt;http://purl.org/ontology/mo/&gt;.
+@prefix rdfs:&lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
+@prefix owl:&lt;http://www.w3.org/2002/07/owl#&gt;.
+@prefix dbpedia:&lt;http://dbpedia.org/resouce/&gt;.
+@prefix bbc:&lt;http://www.bbc.co.uk/music/artists/&gt;.
+
+&lt;artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d#_&gt;
+  rdfs:label "The Beatles";
+  owl:sameAs dbpedia:The_Beatles,
+             bbc:b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d#artist.
+</pre>
+<h3 id="calibre_toc_154" class="calibre13">
+	RDFS</h3>
+<p class="calibre1">RDF Schema (RDFS) is an extension of RDF which allows resources to be classified explicitly as classes or properties; it also supports some further statements that depend on this classification, such as class-subclass or property-subproperty relationships, and domain and range of a property. Some important resources in RDFS are as follows (for brevity we use the "rdfs" prefix defined above):</p>
+<dl class="calibre1">
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:Class</b></dt>
+	<dd class="calibre19">
+		A resource representing the class of all classes.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:subClassOf</b></dt>
+	<dd class="calibre19">
+		Used as a predicate to mean that the subject is a subclass of the object.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:subPropertyOf</b></dt>
+	<dd class="calibre19">
+		Used as a predicate to mean that the subject is a sub-property of the object.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:domain</b></dt>
+	<dd class="calibre19">
+		Used as a predicate when the subject is a property and the object is the class that is domain of this property.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:range</b></dt>
+	<dd class="calibre19">
+		Used as a predicate when the subject is a property and the object is the class that is range of this property.</dd>
+</dl>
+<p class="calibre1">The following statements in Turtle serve to illustrate these RDFS resources. Note that they use abbreviated URLs for which the prefixes are given above.</p>
+<pre class="calibre16">mo:member rdf:type rdfs:Property.
+mo:member rdfs:domain mo:MusicGroup.
+
+mo:member rdfs:range foaf:Agent.
+mo:MusicGroup rdfs:subClassOf foaf:Group.
+</pre>
+<p class="calibre1">In these statements, the resource "mo:member" denotes the property that relates a music group to each of its members -- for instance, the Beatles to John, Paul, George and Ringo, as in the following triple:</p>
+<pre class="calibre16">dbpedia:The_Beatles mo:member dbpedia:Ringo_Starr.
+</pre>
+<p class="calibre1">The second and third statements above give the domain and range of the property "mo:member". Intuitively, their meaning is that if "mo:member" is employed as predicate in a triple, its subject will belong to the class "mo:MusicGroup", and its object to the class "foaf:Agent". The fourth statement means that any resource belonging to the class "mo:MusicGroup" will also belong to the (more general) class "foaf:Group".</p>
+<p class="calibre1">An important gain in adding such statements is that they allow new facts to be inferred from existing ones. Consider for instance how they may be combined with the statement (just given) that Ringo is a member of the Beatles. Using the domain and range statements for the property "mo:member", it follows directly that the Beatles are a music group, and that Ringo is an agent; using the subClassOf statment, it follows further that the Beatles are a group. Encoded in Turtle, these inferred facts are as follows:</p>
+<pre class="calibre16">dbpedia:The_Beatles rdf:type mo:MusicGroup.
+dbpedia:Ringo_Starr rdf:type foaf:Agent.
+dbpedia:The_Beatles rdf:type foaf:Group.
+</pre>
+<p class="calibre1">RDFS also contains some predicates for linking a resource to information useful in presentation and navigation, but not for inference. These include the following:</p>
+<dl class="calibre1">
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:comment</b></dt>
+	<dd class="calibre19">
+		Associates a resource with a human-readable description of it.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:label</b></dt>
+	<dd class="calibre19">
+		Associates a resource with a human-readable label for it.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:seeAlso</b></dt>
+	<dd class="calibre19">
+		Associates a resource with another resource that might provide additional information about it.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">rdfs:isDefinedBy</b></dt>
+	<dd class="calibre19">
+		A sub-property of "rdfs:seeAlso", indicating a resource that contains a definition of the subject resource.</dd>
+</dl>
+<h3 id="calibre_toc_155" class="calibre13">
+	OWL</h3>
+<p class="calibre1">The Web Ontology Language (OWL) extends RDFS to provide an implementation of a description logic, capable of expressing more complex general statements about individuals, classes and properties.</p>
+<p class="calibre1">OWL was developed in the early 2000s and became a W3C standard (along with RDFS) in 2004. The acronym OWL was preferred to the more logical WOL because it is easier to pronounce, provides a handy logo, and is suggestive of wisdom. Of course the name also reminds us of the character in "Winnie the Pooh" who misspells his name "Wol".</p>
+<p class="calibre1">The reason for choosing description logic, rather than a more expressive kind of mathematical logic, has already been mentioned: the aim was to achieve fast scalable reasoning services, and hence to use a logic for which efficient reasoning algorithms were already available. In fact description logics are more a family of languages than a single language. They can be thought of as a palette of operators for constructing classes, properties and statements, from which the user can make different selections, so obtaining fragments with different profiles of expressivity and tractability.</p>
+<p class="calibre1"><a href="owl2.png"><img src="owl2.png" alt="OWL fragments" class="calibre20"/></a></p>
+<p class="calibre1"><em class="calibre8">Figure 4: Fragments of OWL 2</em><br class="calibre10"/>
+	<em class="calibre8">Source: <a href="http://techwiki.openstructs.org/index.php/File:OWL1vOWL2.png">http://techwiki.openstructs.org/index.php/File:OWL1vOWL2.png</a></em><br class="calibre10"/>
+	<em class="calibre8">Citation: OWL 2 Fragments</em><br class="calibre10"/>
+	<em class="calibre8">License: CC Attribution 3.0</em></p>
+<p class="calibre1">The OWL standard is under constant development, and the current version OWL 2.0 provides for the fragments shown in Figure 4; their meanings are as follows:</p>
+<dl class="calibre1">
+	<dt class="calibre10">
+		<b class="calibre18">OWL 2 Full</b></dt>
+	<dd class="calibre19">
+		Used informally to refer to RDF graphs considered as OWL 2 ontologies and interpreted using the RDF-Based Semantics.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">OWL 2 DL</b></dt>
+	<dd class="calibre19">
+		Used informally to refer to OWL 2 ontologies interpreted using the formal semantics of Description Logic ("Direct Semantics").</dd>
+	<dt class="calibre10">
+		<b class="calibre18">OWL 2 EL</b></dt>
+	<dd class="calibre19">
+		A simple fragment limited to basic classification, allowing reasoning in polynomial time.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">OWL 2 QL</b></dt>
+	<dd class="calibre19">
+		A fragment designed to be translatable to querying in relational databases.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">OWL 2 RL</b></dt>
+	<dd class="calibre19">
+		A fragment designed to be efficiently implementable using rule-based reasoners.</dd>
+</dl>
+<p class="calibre1">As already explained, a detailed understanding of OWL is not necessary for working with Linked Data. When reasoning over huge amounts of data, only the simplest reasoning processes are computationally efficient, and these can for the most part be implemented using only the resources of RDFS. Very briefly, the additional resources in OWL are terms providing mainly for the following:</p>
+<ul class="calibre3">
+	<li class="calibre4">
+		Class construction: forming new classes from existing classes, properties and individuals (e.g., ObjectIntersectionOf);</li>
+	<li class="calibre4">
+		Property construction: distinguishing object properties (resources as values) from data properties (literals as values);</li>
+	<li class="calibre4">
+		Class axioms: statements about classes, describing sub-class, equivalence and disjointness relationships;</li>
+	<li class="calibre4">
+		Property axioms: statments about properties, including relationships such as equivalence and sub-property, and also attributes such as whether a property is functional, transitive, and so forth;</li>
+	<li class="calibre4">
+		Individual axioms: statements about individuals, including class membership, and whether two resources represent the same individual or different individuals.</li>
+</ul>
+<h3 id="calibre_toc_156" class="calibre13">
+	SPARQL</h3>
+<p class="calibre1">The SPARQL Protocol and RDF Query Language (a recursive acronymn, since it contains itself) is a language for formulating queries over RDF data. It is the Semantic Web's counterpart to SQL (Structure Query Language), which has been a standard language for querying relational databases since the 1980s. SPARQL is a recent addition to the Semantic Web stack of languages, having been recommended as a W3C standard in 2008 [6].</p>
+
+<p class="calibre1">Since chapter 3 of this book is dedicated to SPARQL, we limit ourselves here to an example that illustrates its purpose. Comparing SPARQL with SQL, the key difference is that it is designed for retrieving information from sets of triples, rather than from data organised into relations (i.e., tables). Queries are therefore formulated using lists of RDF triples in which some URIs or literals are replaced by variables, as in the following:</p>
+<pre class="calibre16">PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX music-ont: &lt;http://purl.org/ontology/mo/&gt;
+
+SELECT ?album_name ?track_title 
+WHERE {
+  dbpedia:The_Beatles foaf:made ?album .
+  ?album dc:title ?album_name . 
+  ?album music-ont:track ?track .
+  ?track dc:title ?track_title }
+</pre>
+<p class="calibre1">Translated into English, the meaning of this query is as follows:</p>
+<blockquote class="calibre12">
+	Retrieve a list of all album names AN and track titles TT in the data for which the following conditions hold:
+	<ol class="calibre21">
+		<li class="calibre4">
+			There is an album A made by the Beatles.</li>
+		<li class="calibre4">
+			Album A has the title AN.</li>
+		<li class="calibre4">
+			There is a track T on album A.</li>
+		<li class="calibre4">
+			Track T has the title TT.</li>
+	</ol>
+</blockquote>
+<p class="calibre1">Or more colloquially: retrieve the titles of all tracks on albums by the Beatles, along with the corresponding album titles. The response should be a list of pairs, each containing an album name and a track title.</p>
+<p class="calibre1">This example shows the simplest kind of query, in which the WHERE statement is simply a list of triples (containing variables). SPARQL also provides some more sophisticated constructs: these include FILTER, which allows conditions on the values of variables (e.g., that a number should be between 1990 and 2000); also OPTIONAL, which specifies data that should be retrieved <i class="calibre8">if available</i>, while allowing the query to succeed even when they are unavailable. For more information on these more complex constructs, see Chapter 3.</p>
+<p class="calibre1">Practically, to pose a query to a dataset you need to use a program or website that serves as a SPARQL <i class="calibre8">endpoint</i>. For a list of endpoints see the W3C site at <a href="http://www.w3.org/wiki/SparqlEndpoints">http://www.w3.org/wiki/SparqlEndpoints</a>. Typically, an endpoint interface provides text fields where you can type the URL of the dataset you wish to query, and the query itself (e.g., the SELECT query in the example above). On hitting the "Submit" button, you obtain a dynamically generated webpage listing the values of the query variables in a table. There are also libraries allowing you to incorporate SPARQL queries into your programs, such as the Java library Jena at <a href="http://jena.apache.org/">http://jena.apache.org/</a> or php BOTK <a href="http://ontology.it/tools/botk">http://ontology.it/tools/botk</a>.</p>
+<p class="calibre1"><span style="color: rgb(84, 121, 115)"><b>HIGHLIGHT:</b>
+<i>LinkedData.Center provides you with a fully configured and fully managed server that exposes a private SPARQL endpont. Thanks to high capacity RDF storage (included in the service) you are able to load any number of RDF triple and query ther resulting graph using SPARQL. </i></span></p>
+<div class="calibre6" id="calibre_pb_9"></div>
+</body></html>

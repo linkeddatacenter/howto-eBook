@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 class="calibre9" id="calibre_toc_60">
+	<span class="calibre11">3.6.2 Providing access to the dataset</span></h2>
+<p class="calibre1"><span>A dataset can be accessed via four different mechanisms:</span></p>
+<ul class="calibre3">
+	<li class="calibre4">
+		<span>Dereferencing HTTP URIs</span></li>
+	<li class="calibre4">
+		<span>RDFa</span></li>
+	<li class="calibre4">
+		<span>SPARQL endpoint</span></li>
+	<li class="calibre4">
+		<span>RDF dump</span></li>
+</ul>
+<p class="calibre1"><span>These will be described below.</span></p>
+<p class="calibre1"><span>As we saw earlier, the first two linked data principles state that URIs should be used as names for things and that HTTP URIs should be used so that users can look up those names. <i class="calibre8">Dereferencing</i><b class="calibre18"> </b>is the process of looking up the definition of a HTTP URI. </span></p>
+<p class="calibre1"><span>The URI <a href="http://dbpedia.org/resource/The_Beatles"><span>http://dbpedia.org/resource/The_Beatles</span></a> is used to name The Beatles. It is not possible to send The Beatles over HTTP. However if you access this URI you will be forwarded to a document at some other location that can provide you with information about The Beatles. The HTTP conversation goes as follows:</span></p>
+<ol class="calibre21">
+	<li class="calibre4">
+		<span>You request data from a URI used to name a thing such as The Beatles (e.g. <a href="http://dbpedia.org/resource/The_Beatles"><span>http://dbpedia.org/resource/The_Beatles</span></a>). You may request data in a particular format such as HTML or RDF/XML.</span></li>
+	<li class="calibre4">
+		<span>The server responds with a 303 status (meaning redirect) and another location from which the data in the preferred format can be accessed</span></li>
+	<li class="calibre4">
+		<span>You request data from the location to which you were redirected.</span></li>
+	<li class="calibre4">
+		<span>The server responds with a 200 status (meaning your request has been successful) and a document in the preferred format.</span></li>
+</ol>
+<p class="calibre1"><span>If you request data about The Beatles in HTTP format you will be redirected to a web page (<a href="http://dbpedia.org/page/The_Beatles"><span>http://dbpedia.org/page/The_Beatles</span></a>). If you request the data in RDF/XML format then you will be redirected to an alternative document (<a href="http://dbpedia.org/data/The_Beatles.rdf"><span>http://dbpedia.org/data/The_Beatles.rdf</span></a>). If you are providing rather than requesting the data then you need to decide which RDF triples should be returned from your dataset in response to dereferencing a HTTP URI about an entity (such as The Beatles) which cannot itself be returned. Guidance on what to return can be found in [16]. This can be summarised as follows:</span></p>
+<ul class="calibre3">
+	<li class="calibre4">
+		<span><i class="calibre8">Immediate description:</i> All of the triples in the dataset in which the originally requested URI was the subject. </span></li>
+	<li class="calibre4">
+		<span><i class="calibre8">Backlinks:</i> All triples in which the URI is the object. This allows browsers or crawlers to traverse the data in two directions. </span></li>
+	<li class="calibre4">
+		<span><i class="calibre8">Related descriptions:</i> Triples not directly linked to the resource but likely to be of interest. For example, information about the author could be sent with information about a book as this is likely to be of interest  </span></li>
+	<li class="calibre4">
+		<span><i class="calibre8">Metadata:</i> Information about the data, along the lines described in 3.4.1 such as the author of the data and licensing information. </span></li>
+	<li class="calibre4">
+		<span><i class="calibre8">Syntax:</i> There are a number of ways of serializing RDF triples. The data source may be able to provide RDF in more than one format, for example as Turtle as well as RDF/XML.</span></li>
+</ul>
+<p class="calibre1"><span><i class="calibre8">RDFa</i><b class="calibre18"> </b>stands for “RDF in attributes”. RDFa is an extension to HTML5 for embedding RDF within HTML documents. The advantage of RDFa is that a single document can be used for both human and machine consumption of the data. A human accessing the data via a web browser need not be aware that an alternative RDF representation is embedded within the page. RDFa can be thought of a bridge between the Web of Data and the Web of (human readable) Documents.</span></p>
+<p class="calibre1"><span>Figure 11 lists the main attributes of RDFa. The <i class="calibre8">about</i> attribute specifies the subject that the metadata is about. The <i class="calibre8">typeof</i> attribute specifies the rdf:type of the subject. The <i class="calibre8">property</i> attribute specifies the type of relationship between the subject and another resource. The <i class="calibre8">vocab</i> and <i class="calibre8">prefix</i> attributes specify the default vocabulary and prefix mappings.</span></p>
+<p class="calibre1"><span><img src="image021.png" alt="" class="calibre39"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 11: RDFa attributes.</em></p>
+<p class="calibre1"><span>Below we can see a portion of HTML+RDFa contained in a HTML &lt;div&gt; element. The subject of this fragment of RDFa is specified using the <i class="calibre8">about</i> attribute. Here the subject is the MusicBrainz URI for The Beatles. In the line below we see the <i class="calibre8">typeof</i> property which is used to specify the rdf:type of the subject. The type of The Beatles is specified as the MusicGroup concept from the Music Ontology.</span></p>
+<p class="calibre1"><span>&lt;div class="artistheader" </span></p>
+<p class="calibre1"><span>   about="<a href="http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d#_"><span>http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d#_</span></a>"  </span></p>
+<p class="calibre1"><span>   typeof="<a href="http://purl.org"><span>http://purl.org</span></a>./ontology/mo/MusicGroup"&gt;</span></p>
+<p class="calibre1"><span>    …</span></p>
+<p class="calibre1"><span> &lt;/div&gt;</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>Below we can be see this RDF triple extracted from the HTML+RDFa.</span></p>
+<p class="calibre1"><span>&lt;<a href="http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d#_"><span>http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d#_</span></a>&gt;</span></p>
+<p class="calibre1"><span>   &lt;<a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"><span>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</span></a>&gt;</span></p>
+<p class="calibre1"><span>     &lt;<a href="http://purl.org./ontology/mo/MusicGroup"><span>http://purl.org./ontology/mo/MusicGroup</span></a>&gt;.</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>Figure 12 shows an example of a page in HTML+RDFa format. This is the MusicBrainz page about The Beatles (<a href="http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d"><span>http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d</span></a>). As mentioned earlier, the human reader need not be aware of the RDF embedded within the page. </span></p>
+<p class="calibre1"><span><img src="image024.png" alt="" class="calibre40"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 12: MusicBrainz page in HTML+RDFa format.</em></p>
+<p class="calibre1"><span>An RDFa distiller and parser can be used to extract the RDF representation. In Figure 3.13 the URL for the MusicBrainz page about The Beatles has been entered into the form (<a href="http://www.w3.org/2007/08/pyRdfa"><span>http://www.w3.org/2007/08/pyRdfa</span></a>). </span></p>
+<p class="calibre1"><span><img src="image025.png" alt="" class="calibre41"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 13: Extracting RDF from a MusicBrainz page in HTML+RDFa format.</em></p>
+<p class="calibre1"><span>Figure 14 shows a fragment of the RDF contained in the page, represented in the N-Triples format. </span></p>
+<p class="calibre1"><span><img src="image028.png" alt="" class="calibre42"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 14: Extracted RDF in N-Triples format.</em></p>
+<p class="calibre1"><span>An <i class="calibre8">RDF Dump</i> is a file that contains the whole or some subset of an RDF dataset. A dataset may be split over several data dumps. An RDF dump may use one of a number of formats. RDF/XML encodes RFD in XML syntax. N-Triples is a subset of the Turtle format in which the RDF is represented as a list of dot-separated triples. The format N-Quads is an extension of N-Triples in which a fourth element specifies the context or named graph of each triple. A site that maintains a list of available RDF data dumps can be found in [17].</span></p>
+<p class="calibre1"><span><i class="calibre8">SPARQL</i><b class="calibre18"> </b>is a language that can be used to query an RDF dataset. A SPARQL endpoint is service can that processes SPARQL queries and return results. SPARQL queries can be used to retrieve particular subsets of the dataset. See chapter 2 for more information on SPARQL.<b class="calibre18"> </b>Lists of publicly available SPRAQL endpoints are maintained at [18] and [19].</span></p>
+</body></html>

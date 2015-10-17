@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_83" class="calibre9">
+	4.15 Semantic search</h2>
+<p class="calibre1">One possible method of input to semantic search is a pseudo natural language query. Entity extraction techniques can then be applied to the text query (a number of entity extraction tools were presented in chapter 3, section 3.9.3).</p>
+<p class="calibre1"><img src="chapter4_image105.png" alt="" class="calibre128"/></p>
+<p class="calibre1"><em class="calibre8">Figure 37: Extraction of entities from a pseud-natural language query.</em></p>
+<p class="calibre1">By a process termed query expansion, the entities can be mapped to resources within our dataset. For an entity such as ”song” this may involve expanding to a number of candidate synonyms and then attempting to map to these to resources in the dataset.</p>
+<p class="calibre1"><img src="chapter4_image107.png" alt="" class="calibre129"/></p>
+<p class="calibre1"><em class="calibre8">Figure 38: Mapping the entity “song” to the class Track in the music ontology.</em></p>
+<p class="calibre1">Similarly, the entity “written by” may be mapped to the entity composer in the music ontology.</p>
+<p class="calibre1"><img src="chapter4_image109.png" alt="" class="calibre130"/></p>
+<p class="calibre1"><em class="calibre8">Figure 39: Mapping the “written by” entity to the composer property.</em></p>
+<p class="calibre1">In some cases there may be a direct mapping between an entity and resource in the dataset. For example, the entity “member (of)” may be mapped to the member_of property in the music ontology. This is the inverse of the member property in the music ontology that is used to define artists as members of groups.</p>
+<p class="calibre1"><img src="chapter4_image111.png" alt="" class="calibre131"/></p>
+<p class="calibre1"><em class="calibre8">Figure 40: Mapping the “member (of)” entity.</em></p>
+<p class="calibre1">A process of <em class="calibre8">contextual analysis</em> is used to decide between candidate mappings. If we start to piece together the parts of the query into the same subgraph we see that the range of the mo:member property is the class mo:MusicGroup. According to this subgraph we would expect the “the Beatles” to be a music group. We would therefore select this expansion of the entity over musical works, posters and books that also have “the Beatles” as their label.</p>
+<p class="calibre1"><img src="chapter4_image113.png" alt="" class="calibre132"/></p>
+<p class="calibre1"><em class="calibre8">Figure 41: Piecing together a subgraph for the query.</em></p>
+<p class="calibre1">Once the entity mappings have been established, the pseudo natural language query can then be expressed as a SPARQL query (shown visually below) that retrieves tracks (variable ?x) composed by someone (variable ?y) who is a member of The Beatles. (See chapter 2 for an introduction to SPARQL.)</p>
+<p class="calibre1"><img src="chapter4_image115.png" alt="" class="calibre133"/></p>
+<p class="calibre1"><em class="calibre8">Figure 42: The SPARQL query (shown visually) for tracks by members of The Beatles.</em></p>
+</body></html>

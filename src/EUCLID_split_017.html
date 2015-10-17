@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h1 id="calibre_toc_7" class="calibre2">
+	<a class="calibre11"></a>Part I: Introduction to SPARQL</h1>
+<p class="calibre1">SPARQL was proposed as a standard by the World Wide Web Consortium (W3C) in November 2008. It is maintained and developed by the W3C SPARQL Working Group, who in November 2012 recommended an upgraded version SPARQL 1.1 with new features including an update language (allowing users to change as well as consult RDF datasets). The latest recommendation can be found at these two sites, one for the <a href="http://www.w3.org/TR/sparql11-query">query language</a> and one for <a href="http://www.w3.org/TR/sparql11-update">update</a>:</p>
+<pre class="calibre16">  http://www.w3.org/TR/sparql11-query
+  http://www.w3.org/TR/sparql11-update
+</pre>
+<p class="calibre1">Along with RDF and OWL, SPARQL is one of the three core standards of the Semantic Web. Its location in the Semantic Web "stack of languages" is shown in Figure 1. One point to note in the figure is that SPARQL does not depend on RDFS and OWL. However, as will be shown later in the chapter, knowledge encoded in RDFS and OWL may enhance the power of querying.</p>
+<p class="calibre1"><img src="semwebstack_0.png" alt="Web Generations" class="calibre14"/></p>
+<p class="calibre1"><em class="calibre8"><span class="calibre23">Figure 1: SPARQL in Semantic Web stack</span></em></p>
+<p class="calibre1">SPARQL, as a database query language, resembles the well-known Structured Query Language (SQL). The syntax of SPARQL is shaped by the fact that it operates over graph data represented as RDF triples, as opposed to SQL's tabular data organised in a relational database.</p>
+
+<p class="calibre1">The essence of querying is shown by the following illustration, using for the time being English rather than RDF. Imagine an RDF dataset with statements containing the following information:</p>
+<blockquote class="calibre12">
+	The Beatles made the album "Help".<br class="calibre10"/>
+	The Beatles made the album "Abbey Road".<br class="calibre10"/>
+	The Beatles made the album "Let it be".<br class="calibre10"/>
+	The Beatles includes band-member Paul McCartney.<br class="calibre10"/>
+	Wings made the album "Band on the run".<br class="calibre10"/>
+	Wings made the album "London Town".<br class="calibre10"/>
+	Wings includes band-member Paul McCartney.<br class="calibre10"/>
+	The Rolling Stones made the album "Hot Rocks".</blockquote>
+<p class="calibre1">One can imagine various queries that a music portal might need to run over such a dataset. For instance, the portal might construct web pages on demand for any album or group nominated by the user. This would require retrieval of information from the dataset for questions such as the following:</p>
+<blockquote class="calibre12">
+	Who made the album "Help"?<br class="calibre10"/>
+	Which albums did the Beatles make?</blockquote>
+<p class="calibre1">These are so-called WH-questions ("who", "what", "where", etc.), for which the first would receive a single answer ("The Beatles"), and the second a list of three answers ("Help", "Abbey Road", "Let it be"). The SPARQL counterparts to these questions use RDF triples that contain <i class="calibre8">variables</i>; these correspond to the WH-words in the English queries. The general form for such questions (still working in English) is as follows:</p>
+<blockquote class="calibre12">
+	Give me all values of X such that X made the album "Help".<br class="calibre10"/>
+	Give me all values of X such that the Beatles made X.</blockquote>
+<p class="calibre1">We can go further than this by introducing more than one variable, thus generalising the query:</p>
+<blockquote class="calibre12">
+	Give me all values of X and Y such that X made Y.</blockquote>
+<p class="calibre1">This is like asking a question with two WH-words, such as "Which bands made which albums?". The answer is not a list of values, as before, but a list of X-Y <i class="calibre8">pairs</i> that could be conveniently presented in a table:</p>
+<table border="1" class="calibre24">
+	<tbody class="calibre25">
+		<tr class="calibre26">
+			<td class="calibre27">
+				<b class="calibre18">X</b></td>
+			<td class="calibre27">
+				<b class="calibre18">Y</b></td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				The Beatles</td>
+			<td class="calibre27">
+				"Help"</td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				The Beatles</td>
+			<td class="calibre27">
+				"Abbey Road"</td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				The Beatles</td>
+			<td class="calibre27">
+				"Let it be"</td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				Wings</td>
+			<td class="calibre27">
+				"Band on the run"</td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				Wings</td>
+			<td class="calibre27">
+				"London Town"</td>
+		</tr>
+		<tr class="calibre26">
+			<td class="calibre27">
+				The Rolling Stones</td>
+			<td class="calibre27">
+				"Hot Rocks"</td>
+		</tr>
+	</tbody>
+</table>
+<p class="calibre1">In all these examples, the question is represented by a <i class="calibre8">single</i> statement with one or more variables; however, we can also construct more complex queries containing several statements:</p>
+<blockquote class="calibre12">
+	Give me all values of X and Y such that: (a) X made Y, and (b) X includes band member Paul McCartney.</blockquote>
+<p class="calibre1">The answer would be the first five pairs from the previous answer, excluding "Hot Rocks" since the dataset does not list Paul McCartney as a band member of the Rolling Stones.</p>
+<p class="calibre1">Moving now from English to SPARQL, here is the encoding for the simple query "Which albums did the Beatles make?" for the MusicBrainz dataset. For now don't worry about learning the exact syntax; the important thing is to understand what the various bits and pieces are doing.</p>
+<pre class="calibre16">PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+SELECT ?album_title  
+WHERE {
+  ?band foaf:name "The Beatles" ; foaf:made ?album .
+  ?album a mo:SignalGroup ; dc:title ?album_title .
+}
+</pre>
+<p class="calibre1">The query begins with PREFIX statements that define abbreviations for namespaces. The query proper begins in the line starting SELECT, which also contains a <i class="calibre8">variable</i> (corresponding to X and Y in our English examples) starting with the question mark character '?'. Choose any word you like for the rest of the variable name, provided that you use it consistently. The remainder of the query, starting WHERE, contains a list of <i class="calibre8">RDF triple patterns</i>. These are like RDF triples except that they include variables. They are expressed in Turtle, which we introduced in Chapter 1.</p>
+<p class="calibre1">The WHERE clause in the example has two RDF triple patterns, separated by a full stop. The first pattern matches resources made by the Beatles; the second requires that these resources belong to a class <span class="calibre28">mo:SignalGroup</span> (this rather weird name distinguishes albums, which are "signal groups", from their constituent tracks, which are also encoded as resources made by the Beatles).</p>
+<p class="calibre1">The response to a query is computed by a process known as <i class="calibre8">graph matching</i>.</p>
+
+<h3 id="calibre_toc_164" class="calibre13">
+	SPARQL terminology</h3>
+<p class="calibre1">Before proceeding to the detailed structure of queries, it is worth pausing to review the concepts introduced so far:</p>
+<dl class="calibre1">
+	<dt class="calibre10">
+		<b class="calibre18">RDF triple</b></dt>
+	<dd class="calibre19">
+		An RDF triple is a statement of the form subject-predicate-object expressed in one of the RDF formalisms.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">RDF triple pattern</b></dt>
+	<dd class="calibre19">
+		An RDF triple pattern is the same as an RDF triple except that any or all of its three constituents may be replaced by a variable.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">RDF graph</b></dt>
+	<dd class="calibre19">
+		An RDF graph is a set of RDF triples. You probably know that "graph" in mathematics has two distinct meanings: (1) a diagram showing points arranged by their relationship to an X axis and a Y axis; (2) a set of vertices (or nodes) linked by edges (or arcs). In the case of RDF the second meaning applies, where the subject and object in a triple are vertices, and the predicate is an edge that links them by pointing from subject to object. Formally, an RDF graph can be described as a <i class="calibre8">directed labelled multigraph</i>, which means (a) that edges are directional (you cannot switch subject and object without changing the statement), (b) that edges are named (by the predicate identifier), and (c) that there can be multiple edges linking two vertices (resources may be related in different ways).</dd>
+	<dt class="calibre10">
+		<b class="calibre18">RDF dataset</b></dt>
+	<dd class="calibre19">
+		An RDF dataset is a set of RDF triples comprising a <i class="calibre8">default</i> RDF graph, which by definition is unnamed, and zero or more <i class="calibre8">named</i> RDF graphs. The idea behind this segmentation is that SPARQL queries can be explicitly confined to a named subset rather than running over the whole dataset.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">Graph pattern</b></dt>
+	<dd class="calibre19">
+		We use this term to refer to a conjunction of RDF triple patterns. It is therefore the same as an RDF graph, except that its constituents are RDF triple <i class="calibre8">patterns</i> (which contain variables) as opposed to normal RDF triples (which don't). Note that in a query, the expression following the keyword WHERE is a graph pattern; this is why graph patterns are important.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">SPARQL Protocol client</b></dt>
+	<dd class="calibre19">
+		A SPARQL Protocol client is an HTTP client that sends requests for SPARQL Protocol operations. As you probably know, "client" here refers to a program that sends a request to another program, possibly running on another computer, over a network; the other computer is known as the "server".</dd>
+	<dt class="calibre10">
+		<b class="calibre18">SPARQL Protocol service</b></dt>
+	<dd class="calibre19">
+		A SPARQL Protocol service is an HTTP server that services requests for SPARQL Protocol operations.</dd>
+	<dt class="calibre10">
+		<b class="calibre18">SPARQL endpoint</b></dt>
+	<dd class="calibre19">
+		A SPARQL endpoint is a SPARQL Protocol service, identified by a given URL, which listens for requests from SPARQL clients.</dd>
+</dl>
+</body></html>

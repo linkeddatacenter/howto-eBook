@@ -1,0 +1,420 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_50" class="calibre9">
+	Querying with SPARQL</h2>
+<h3 id="calibre_toc_165" class="calibre13">
+	Submitting a query</h3>
+<p class="calibre1">In developing an application , you will need to build queries into your application code. There are APIs that help you to do this, like the ones provided by LinkedData.Center. However, before learning to use APIs, you can learn the syntax for queries (and their responses) by using an interactive SPARQL endpoint web application to enter the query by hand.</p>
+<p class="calibre1">As an example of this procedure Figure shows a snapshot of the LinkedBrainz endpoint at <span class="calibre28">http://linkedbrainz.org/sparql</span> with a query about the albums made by the Beatles. </p>
+
+<p class="calibre1"><img src="query1.png" alt="Web Generations" class="calibre14"/></p>
+<p class="calibre1"><em class="calibre8"><span class="calibre23">Figure 3: Typing a query into a SPARQL endpoint</span></em></p>
+
+<p class="calibre1">If you type in this query and hit the "Run Query" button you will obtain a table giving values for the variable <span class="calibre28">?album_title</span>:</p>
+<p class="calibre1">
+
+<table border="1">
+  <tr>
+    <th>album_title</th>
+  </tr>
+  <tr>
+    <td>"'69 Rehearsals"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"'Quote' Unquote: The Sixties Interviews"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"1"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"16 Superhits, Volume 1"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"16 Superhits, Volume 2"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"16 Superhits, Volume 3"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"16 Superhits, Volume 4"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"1962 Live Recordings"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"1962 Live at Star Club in Hamburg"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+  <tr>
+    <td>"1962-1970"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+  </tr>
+</table>
+</p>
+
+<p class="calibre1">Please note that the clause LIMIT 10 in the SPARQL query limits ther results 
+to the first ten solutions that match the "WHERE" clause portion. </p>
+
+<p class="calibre1">It is always a good idea to limit the number of the results in a SPARQL query, because some time returned solution can be really a lot. ORDER BY, LIMIT and OFFSET constructs, like in SQL, help you in paginating results.</p>
+
+<h3 id="calibre_toc_166" class="calibre13">
+	Types of query</h3>
+<p class="calibre1">SPARQL defines the following query types for data retrieval:</p>
+<dl class="calibre1">
+	<dt class="calibre10">
+		<b class="calibre18">ASK</b></dt>
+	<dd class="calibre19">
+		An ASK query is a test of whether there are any resources in the dataset matching the search pattern; the response is either true or false. Intuitively, it poses the question: "Are there any X, Y, etc. satisfying the following conditions ...?"</dd>
+	<dt class="calibre10">
+		<b class="calibre18">SELECT</b></dt>
+	<dd class="calibre19">
+		A SELECT query returns a table in which columns represent variables and rows represent variable bindings matching the search pattern. Intuitively: "Return a table of all X, Y, etc. satisfying the following conditions ...".</dd>
+	<dt class="calibre10">
+		<b class="calibre18">CONSTRUCT</b></dt>
+	<dd class="calibre19">
+		A CONSTRUCT query returns an RDF graph (i.e., set of triples) matching a template, using variable bindings obtained from the dataset using a search pattern. Intuitively: "Find all X, Y, etc. satisfying the following conditions ... and substitute them into the following template in order to generate (possibly new) RDF statements ...".</dd>
+	<dt class="calibre10">
+		<b class="calibre18">DESCRIBE</b></dt>
+	<dd class="calibre19">
+		A DESCRIBE query returns an RDF graph, extracted from the dataset, which provides all available information about a resource (or resources). The resource may be identified by name, or by a variable accompanied by a graph pattern. Intuitively: "Find all statements in the dataset that provide information about the following resource(s) ... (identified by name or description)".</dd>
+</dl>
+<h3 id="calibre_toc_167" class="calibre13">
+	Queries using ASK</h3>
+<p class="calibre1">An ASK query corresponds intuitively to a Yes/No question in conversational language. For example, the following query corresponds to the Yes/No question "Is "All You Need Is Love" a song recorded by the Beatles?":</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+
+ASK
+WHERE {
+  ?band foaf:name "The Beatles" ; foaf:made [ 
+     a mo:Track ; dc:title "All You Need Is Love"^^xsd:string 
+  ].
+}
+
+</pre>
+<p class="calibre1">If this query is submitted as described above, the answer given will be "true".</p>
+<p class="calibre1">Dissecting the syntax of this query, we note the following:</p>
+<ul class="calibre3">
+	<li class="calibre4">
+		The PREFIX statements are not an essential part of a query, but here as elsewhere they are useful as a means of abbreviating RDF triples or patterns. Be careful not to put a full stop at the end of a PREFIX statement, since this will cause a syntax error.</li>
+	<li class="calibre4">
+		The query proper begins with ASK, which specifies the relevant query type.</li>
+	<li class="calibre4">
+		WHERE introduces a graph pattern, which at its simplest is a conjunction of RDF triples or patterns, presented in curly brackets and separated by full stops (or by commas or semicolons, as mentioned in the section on Turtle in Chapter 1). The patterns may use abbreviations defined in the PREFIX statements, and may include one or more variables. (More complex graph patterns will be described later on.)</li>
+	<li class="calibre4">
+		Layout is free provided that terms are separated by white space. For instance, if you wished you could type the whole query on one line, or at the other extreme type a new-line character after every term. The layout given above with new lines for the key words PREFIX, ASK, WHERE, is adopted only for human readability.</li>
+	<li class="calibre4">
+		The keywords of SPARQL syntax – PREFIX, ASK, WHERE, etc. – are not case-sensitive, so if you prefer you can use prefix, ask, where, and so on. In the examples we consistently capitalise these words for reasons of readability, but this has no effect on how the query engine interprets the query.</li>
+</ul>
+<p class="calibre1">If you want to ask whether there are any X, Y, etc. such that certain conditions hold – e.g., "Are there any X such that X was made by the Beatles" – you need to use RDF patterns, which are like triples except that they contain variables. These are represented by names beginning with a question mark '?', as in this example:</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+
+ASK
+WHERE { ?band foaf:name "The Beatles" ; foaf:made ?something } 
+</pre>
+<h3 id="calibre_toc_168" class="calibre13">
+	Queries using SELECT</h3>
+<p class="calibre1">To show the basic syntax of a SELECT query, let us return to the example given in section 2.3:</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+SELECT ?album
+WHERE { ?band foaf:name "The Beatles" ; foaf:made ?album .
+        ?album a mo:SignalGroup
+      } 
+</pre>
+<p class="calibre1">Note the following:</p>
+<ul class="calibre3">
+	<li class="calibre4">
+		After the (optional) PREFIX statements, the query proper begins with SELECT, which specifies the query type.</li>
+	<li class="calibre4">
+		After SELECT you list all the variables that you would like to see tabulated in the response. Variables should be separated by spaces if there are more than one. Alternatively, you can simply put an asterisk after SELECT, meaning that all variables should be tabulated. In the example, this would yield the same result.</li>
+	<li class="calibre4">
+		As before, WHERE introduces a graph pattern including one or more variables.</li>
+	<li class="calibre4">
+		As before, layout is free provided that terms are separated by white space.</li>
+</ul>
+
+<p class="calibre1">Try running the query in the interactive linkedbrainz endpoint. You should obtain in response a list of URIs that use arbitrary codes rather than recognisable words.</p>
+
+<h3 id="calibre_toc_169" class="calibre13">
+	Ordering the rows in the query result</h3>
+<p class="calibre1">For some queries you might want the results to be presented in a particular order. For instance, if your music portal retrieves albums made by the Beatles, using the query given above, you might want to present these in alphabetical order of title. This can be done using the keywords ORDER BY, as in the following example:</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+
+SELECT *
+WHERE { ?band foaf:name "The Beatles" ;  foaf:made ?album .
+        ?album a mo:SignalGroup .
+        ?album dc:title ?title
+      }
+ORDER BY ?title
+</pre>
+<p class="calibre1">The key element in this query is the ORDER BY component at the end, which stipulates that rows should be presented in alphabetical order of the values in the <span class="calibre28">?title</span> column. Note also one other change from the previous example, the use of the asterisk shorthand in the SELECT clause, which asks for <i class="calibre8">all</i> variables in the WHERE clause to be tabulated. This shorthand is not always used, since often the <i class="calibre8">selected</i> variables are a strict subset of those mentioned in the WHERE clause.</p>
+<p class="calibre1">Try replacing <span class="calibre28">ORDER BY ?title</span> by <span class="calibre28">ORDER BY DESC(?title)</span>, which will present the rows in <i class="calibre8">descending</i> rather than ascending order of title (i.e., ascending is the default).</p>
+<p class="calibre1">What exactly do these tables show? The columns, as we have seen, correspond to variables in the query for which tabulation is requested after SELECT, either explicitly by name, or implicitly by the '*' option. The rows give all <i class="calibre8">variable bindings</i> that match the graph pattern in the WHERE clause. A binding is an assignment of identifiers or literals to the variables which, when instantiated in these patterns, will yield a subgraph of the dataset. Note that when computing these bindings, the query engine makes the key assumption that variables occurring in more than one pattern are bound to the <i class="calibre8">same resource</i>. In this way it avoids returning a row in which an album is paired with the title of a different album.</p>
+<h3 id="calibre_toc_170" class="calibre13">
+	Returning results page by page</h3>
+<p class="calibre1">For some queries, including our example, the output table returns too many result at once. In such cases it would be useful if the music portal included a paging facility allowing users to view the information in manageable portions – perhaps ten rows at a time. This can be done through the query engine if you use the keywords LIMIT and OFFSET. To see how this works, trying extending our previous query as follows:</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+
+SELECT *
+WHERE { ?band foaf:name "The Beatles" ;  foaf:made ?album .
+        ?album a mo:SignalGroup .
+        ?album dc:title ?title
+      }
+ORDER BY ?title
+LIMIT 10 OFFSET 0
+</pre>
+<p class="calibre1">You should get back the same table, but cut off after the first ten rows; the result will be the same if you just put <span class="calibre28">LIMIT 10</span> leaving the offset unspecified. Now try raising the number after OFFSET to 10. You should get back the next ten-row segment of the table, covering rows 11-20. In general, if LIMIT is L and OFFSET is S, the query will return L rows starting at S+1 and continuing up to S+L.</p>
+<h3 id="calibre_toc_171" class="calibre13">
+	Using tests to filter the results</h3>
+<p class="calibre1">We have seen queries in which the WHERE clause contains specific resources (the Beatles) or variables (<span class="calibre28">?album</span>). But what if we want to obtain results for any variable <i class="calibre8">that satisfies a certain condition</i> – e.g., albums beginning with the letter 'B', or band members born before 1960?</p>
+<p class="calibre1">Such conditions are called "filters", and to illustrate them, let us switch to an example in which our aim is to retrieve tracks (not albums) with a duration between 300 and 400 seconds. Since in MusicBrainz durations are encoded in milliseconds, the relevant filter condition can be stated as follows:</p>
+<pre class="calibre16">PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+
+SELECT ?title ?duration
+WHERE { ?band foaf:name "The Beatles" ; foaf:made ?track .
+        ?track a mo:Track .
+        ?track dc:title ?title .
+        ?track mo:duration ?duration .
+        FILTER (?duration&gt;=300000 &amp;&amp; ?duration&lt;=400000)
+      }
+ORDER BY ?duration 
+LIMIT 10
+</pre>
+<p class="calibre1">The tables in Figures 5 and 6 show some other operators from which filter conditions can be constructed. Both tables are taken from the <a href="http://www.w3.org/TR/rdf-sparql-query/">W3C specification</a> at <span class="calibre28">http://www.w3.org/TR/rdf-sparql-query/</span>, which can be consulted for further details.</p>
+<p class="calibre1">Conceptually, filters define a boolean condition on a graph pattern binding. We have already seen that the graph pattern in a WHERE clause has a set of solutions, each corresponding to a binding of the variables mentioned in the graph pattern. The filter submits these solutions to a boolean condition, letting through only those variable bindings for which the condition is met. In a naive implementation, the projection would be computed in just this way: first find the set of solutions matching the graph pattern; then select from this set the solutions that satisfy the filter condition, for inclusion in the final result.</p>
+<p class="calibre1"><img src="filter1.png" alt="Web Generations" class="calibre14"/></p>
+<p class="calibre1"><em class="calibre8"><span class="calibre23">Figure 5: Unary operators for filter expressions</span></em></p>
+<p class="calibre1"><img src="filter2.png" alt="Web Generations" class="calibre14"/></p>
+<p class="calibre1"><em class="calibre8"><span class="calibre23">Figure 6: Binary operators for filter expressions</span></em></p>
+<h3 id="calibre_toc_172" class="calibre13">
+	Avoiding duplicate rows in the output table</h3>
+<p class="calibre1">For some queries you may find that the output table has duplicated rows. The reason for this is usually that the selected (tabulated) variables are a strict subset of the variables in the graph pattern. Consider for instance the following table , which you will see if you submit the previous query :</p>
+<p>
+
+<table border="1">
+  <tr>
+    <th>title</th>
+    <th>duration</th>
+  </tr>
+  <tr>
+    <td>"All You Need Is Love"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"300000"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"All You Need Is Love (live on "Our World" TV Show: 1967-06-25)"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"300293"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"All You Need Is Love (live on "Our World" TV Show: 1967-06-25)"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"300293"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"Misery"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"300666"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"[improvisation 5]"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"301080"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"Hey Jude"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"302040"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"I Lost My Little Girl"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"302666"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"Ride Rajbun"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"302666"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"February 10, 1964"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"302826"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+  <tr>
+    <td>"[Think for Yourself studio chatter]"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;</td>
+    <td>"303000"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;</td>
+  </tr>
+</table>
+</p>
+
+<p class="calibre1">In the begin  of this table  we find two rows with track title "All You Need Is Love (live on "Our World" TV Show: 1967-06-25)" and duration 300293; and there are many more examples further down the table. This happens because there might be multiple resources instantiating <span class="calibre28">?track</span> having the same values for <span class="calibre28">?title</span> and <span class="calibre28">?duration</span>. Here, for example, the track "All You Need Is Love (live on "Our World" TV Show: 1967-06-25)" is present in two different albums, so it shows up twice. If all three variables were tabulated, the rows would differ in the <span class="calibre28">?track</span> column, but since this column is not requested, we obtain rows that appear identical. To avoid this you can include the keyword DISTINCT in the SELECT clause, as follows:</p>
+<pre class="calibre16">PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+
+SELECT DISTINCT ?title ?duration
+WHERE { ?band foaf:name "The Beatles" ; foaf:made ?track .
+        ?track a mo:Track .
+        ?track dc:title ?title .
+        ?track mo:duration ?duration .
+        FILTER (?duration&gt;300000 &amp;&amp; ?duration&lt;400000)
+      }
+ORDER BY ?duration LIMIT 10
+</pre>
+<p class="calibre1">The output table, you should now find only one row pairing "All You Need Is Love (live on "Our World" TV Show: 1967-06-25)" with 300293.</p>
+<p class="calibre1">Since DISTINCT is computationally expensive there is an efficient alternative REDUCED which eliminates some duplicates but not necessarily all (e.g., it fails to eliminate the duplication of "Within You Without You" mentioned above); however, DISTINCT is more widely used, and should not be computationally expensive when ORDER BY is also used.</p>
+<h3 id="calibre_toc_173" class="calibre13">
+	Retrieving aggregate data for groups of bindings</h3>
+<p class="calibre1">Suppose that the dataset contains triples specifying the tracks on each album, and associating a duration in milliseconds with each track, represented by an integer literal. (In fact the MusicBrainz dataset associates <i class="calibre8">records</i> with albums, and tracks with records, which complicates the query slightly – see below.) Fully listed this is a lot of data, and you might wish instead to report, for each album, the total duration obtained by summing the durations of the tracks. This is an example of <i class="calibre8">aggregate</i> data, and it requires two operations: first, we must segment the variable bindings into <i class="calibre8">groups</i>, corresponding in this case to all bindings relating to a given album; second, for each group, we must submit the values of a specified variable to an aggegation function – in this case, sum the track durations.</p>
+<p class="calibre1">For instance, suppose the dataset has just two albums matching the query, namely Revolver and Abbey Road; and suppose that for Revolver just three tracks are included, namely "Eleanor Rigby", "I'm only sleeping", and "Doctor Robert", with durations respectively of 200000, 240000, and 160000 milliseconds. (These are just round numbers made up for the example.) This will mean that for Revolver we have three bindings of the variables <span class="calibre28">?album</span>, <span class="calibre28">?track</span>, and <span class="calibre28">?track_duration</span>; and if Abbey Road has four specified tracks, it will correspondingly have four bindings. We now separate the bindings into groups – three for Revolver, four for Abbey Road – and within each group we want to sum the track durations, and return only a table that gives albums along with their total durations. This will mean that the first row of the table will specify Revolver in the <span class="calibre28">?album</span> column, and 600000 in the second column for which we need a new name – perhaps <span class="calibre28">?album_duration</span>.</p>
+<p class="calibre1">Here is a query that achieves this result. In addition it imposes a condition on the total duration of the album, reporting only albums with duration exceeding 3600000 milliseconds (i.e., one hour), selecting (and hence grouping by) album title rather than album.</p>
+<pre class="calibre16">PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+SELECT ?album_title (SUM(?track_duration) AS ?album_duration)
+WHERE { ?album mo:record ?record .
+        ?album dc:title ?album_title .
+        ?record mo:track ?track .
+        ?band foaf:name "The Beatles" ;  foaf:made ?track .
+        ?track mo:duration ?track_duration .
+       
+      } 
+GROUP BY ?album_title
+HAVING  (SUM(?track_duration) &gt; 3600000)
+ORDER BY ?album_duration
+LIMIT 10
+</pre>
+<p class="calibre1">Note two new keywords here: AS introducing a variable name for the sum of durations (this becomes the heading of the second column of the output table); and HAVING introducing a filter over the group of variable bindings that has just been specified by the GROUP BY component.</p>
+<h3 id="calibre_toc_174" class="calibre13">
+	Queries using CONSTRUCT</h3>
+<p class="calibre1">When building an application, you might need to retrieve some information from a queried dataset and re-express it in new RDF triples, perhaps using new names for resources. This might, for example, allow more efficient integration with triples from another dataset.</p>
+<p class="calibre1">To meet this need, SPARQL provides a CONSTRUCT query which uses information retrieved from a dataset in order to build new RDF statements. Note that the query does not <i class="calibre8">update</i> the dataset. The new RDF triples are returned to the user as output, to be used in any way desired, the dataset itself remaining unchanged. (In SPARQL 1.1 there are query types for updating a dataset, as described in a later section of this chapter.)</p>
+<p class="calibre1">To show the basic syntax of a CONSTRUCT query, consider the following example where the user wishes to assert "creator" relationships between artists and their products – of any kind; perhaps the aim is to construct a dataset in which this predicate is used consistently, replacing more specific predicates in MusicBrainz.</p>
+<pre class="calibre16">PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+CONSTRUCT { ?album dc:creator ?band .
+            ?track dc:creator ?band .
+          }
+WHERE { ?band foaf:name "The Beatles" ; foaf:made ?album .
+       ?album mo:record ?record .
+       ?record mo:track ?track . 
+      }
+</pre>
+<p class="calibre1">The key to understanding this query is that the variables employed in the CONSTRUCT list must occur also in the WHERE list. When the query is run, the query engine begins by retrieving the variable bindings satisfying the description in the WHERE list – just as it would for a SELECT query. For each variable binding, it then instantiates the triple patterns in the CONSTRUCT list and so creates (in this case two) new RDF triples. The result of the query is a merged graph including all the created triples.</p>
+<p class="calibre1">Figure 8 shows this outcome diagrammatically for an even simpler CONSTRUCT query, with the relevant part of the dataset and the constructed triples both shown as graphs.</p>
+<p class="calibre1"><img src="construct1.png" alt="Web Generations" class="calibre14"/></p>
+<p class="calibre1"><em class="calibre8"><span class="calibre23">Figure 8: Result of a simple CONSTRUCT query</span></em></p>
+<h3 id="calibre_toc_175" class="calibre13">
+	Ordering and limiting the constructed triples</h3>
+<p class="calibre1">When building new RDF triples with CONSTRUCT, you can use the operators described in section 2.4.4 in order to organise and delimit the variable bindings retrieved from the dataset. The following query will build "creator" relationships only for the first 10 albums recorded by the Beatles, following alphabetical order of the titles, along with their tracks:</p>
+<pre class="calibre16">PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+CONSTRUCT { ?album dc:creator ?band .
+            ?track dc:creator ?band .
+          }
+WHERE { ?band foaf:name "The Beatles" ; foaf:made ?album .
+        ?album mo:record ?record .
+        ?album dc:title ?album_title .
+        ?record mo:track ?track . 
+      }
+ORDER BY ?album_title
+LIMIT 10
+</pre>
+<h3 id="calibre_toc_176" class="calibre13">
+	Query patterns containing disjunction</h3>
+<p class="calibre1">Suppose that for some reason you want to construct triples for albums made <i class="calibre8">either</i> by the Beatles <i class="calibre8">or</i> by the Smashing Pumpkins (or both). Including both of these constraints in the WHERE list will not work, because implicitly the list represents a <i class="calibre8">conjunction</i> of statements, each of which must be satisfied. To allow disjunctions, SPARQL contains a UNION pattern; this is formed by placing the keyword UNION between two subsets of statements, each subset delimited by curly brackets. The meaning is that variable bindings should be retrieved if they satisfy either the statements on the left or the statements on the right (or both). Thus our target query is formed as follows:</p>
+<pre class="calibre16">PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+CONSTRUCT { ?album dc:creator ?band .
+            ?track dc:creator ?band .
+          }
+WHERE { ?band foaf:made ?album .
+        ?album mo:record ?record .
+        ?record mo:track ?track .
+        { ?band foaf:name "The Beatles" }
+          UNION
+        { ?band foaf:name "The Smashing Pumpkins" }
+      }
+</pre>
+<p class="calibre1">Note that the first three statements of the WHERE list lie outside the scope of the UNION operator.</p>
+<h3 id="calibre_toc_177" class="calibre13">
+	Retrieving resources for which information is MISSING from the dataset</h3>
+<p class="calibre1">In the examples we have seen so far, variable bindings must be retrieved for all patterns listed after WHERE. This means that if we retrieve several facts about an album (say), the album will only be included in the output if <i class="calibre8">all</i> these facts are presented in the dataset: if just one is missing, the others will be ignored. SPARQL deals with this problem by allowing any graph pattern in the list to be preceded by the keyword OPTIONAL. This means that when computing variable bindings, the query engine should accept incomplete bindings provided that the unspecified variables occur only in optional patterns.</p>
+<p class="calibre1">In the following query, optional patterns are used ingeniously to select only variable bindings for which a particular variable is <i class="calibre8">not</i> bound. The variable in question records an artist's place of death, and it is assumed that if this information is missing from the dataset, the artist will still be alive. If variables in the CONSTRUCT clause are not bound in the OPTIONAL clause, the triple patterns with these variables are not generated. As a result, "creator" relationships are constructed only for artists who are alive (or more precisely, artists for whom there is no death place recorded in the dataset).</p>
+<pre class="calibre16">PREFIX dbont: &lt;http://dbpedia.org/ontology/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
+
+CONSTRUCT { ?album dc:creator ?artist . }
+WHERE { ?artist foaf:made ?album .
+        OPTIONAL { ?artist dbont:deathPlace ?place_of_death }
+        FILTER (!BOUND(?place_of_death))
+      } LIMIT 10
+</pre>
+<p class="calibre1">Note that in the filter expression '!' denotes negation, so that the whole expression means that the variable is not bound.</p>
+<p class="calibre1">You should take care using this kind of query, since it depends on a risky inference sometimes called the <i class="calibre8">closed-world assumption</i> – namely, that any relevant statement <i class="calibre8">not</i> found in the dataset must be false. Thus if the dataset contains information about places of death, but no statement giving the place of death of Paul McCartney, we infer by this assumption that Paul McCartney must still be alive, since otherwise his place of death would have been recorded.</p>
+<h3 id="calibre_toc_178" class="calibre13">
+	Assigning variables</h3>
+<p class="calibre1">If you want to construct RDF triples using a variable that is <i class="calibre8">derived from</i> retrieved data, e.g., through an arithmetical operation, you can add a BIND statement to the WHERE clause as follows:</p>
+<pre class="calibre16">PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+CONSTRUCT { ?track mo:runtime ?secs } 
+WHERE { ?band foaf:name "The Beatles" ; foaf:made ?album .
+        ?album mo:record ?record .
+        ?record mo:track ?track .
+        ?track mo:duration ?duration .
+        BIND ((?duration/1000) AS ?secs) .
+      } LIMIT 10
+</pre>
+<p class="calibre1">In this way the object of <span class="calibre28">mo:runtime</span> will be given in seconds rather than milliseconds.</p>
+<h3 id="calibre_toc_179" class="calibre13">
+	Constructing new triples using aggregate data</h3>
+<p class="calibre1">We have already discussed a SELECT query that returns aggregate data by summing the durations of tracks in each album. You may recall that such a query uses the AS keyword in the expression following SELECT, to introduce a variable name for the aggregate value – in this case, the album duration. In the context of a CONSTRUCT query we therefore have a problem: how to introduce this new variable for the aggregate?</p>
+<p class="calibre1">The solution used in SPARQL is to allow a <i class="calibre8">sub-query</i> after the keyword WHERE, in place of the usual graph pattern. This is achieved by the following rather convoluted syntax:</p>
+<pre class="calibre16">PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+CONSTRUCT { ?album mo:duration ?album_duration }
+WHERE {
+    SELECT ?album (SUM(?track_duration) AS ?album_duration)
+    { ?band foaf:name "The Beatles" ; foaf:made ?album .
+      ?album mo:record ?record .
+      ?record mo:track ?track .
+      ?track mo:duration ?track_duration . 
+    } GROUP BY ?album 
+      HAVING (SUM(?track_duration) &gt; 3600000) 
+} LIMIT 10
+</pre>
+<h3 id="calibre_toc_180" class="calibre13">
+	Queries using DESCRIBE</h3>
+<p class="calibre1">Like CONSTRUCT, DESCRIBE delivers as output an RDF graph – i.e., a set of RDF triples. It differs from CONSTRUCT in that these triples are not constructed according to a template, but returned as found in the dataset. The reasons for doing this are similar to those for CONSTRUCT – you might, for instance, want to add these triples to another dataset – but you would prefer DESCRIBE if you were satisfied with the original encoding and had no reason to re-express the information using different resource names.</p>
+
+<p class="calibre1">Resources can be specified more generically as bindings to a variable. Thus the following query requests all triples that mention for an album.</p>
+<pre class="calibre16">PREFIX mo: &lt;http://purl.org/ontology/mo/&gt;
+
+DESCRIBE ?track  WHERE { ?track a mo:Track  } LIMIT 1
+</pre>
+<p class="calibre1"> </p>
+<div class="calibre6" id="calibre_pb_23"></div>
+</body></html>

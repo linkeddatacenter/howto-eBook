@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_51" class="calibre9">
+	SPARQL protocol</h2>
+<p class="calibre1">The SPARQL 1.1 Protocol comprises two operations, one for querying, one for updating. An operation specifies the following:</p>
+<ul class="calibre3">
+	<li class="calibre4">
+		An HTTP method (either GET or POST)</li>
+	<li class="calibre4">
+		HTTP query parameters</li>
+	<li class="calibre4">
+		Message content in the HTTP request body</li>
+	<li class="calibre4">
+		Message content in the HTTP response body</li>
+</ul>
+<p class="calibre1">A request is sent from the SPARQL client to the SPARQL server (or endpoint), which sends back a status code, possibly accompanied by other data (e.g., tables with the results of the query). For a query operation, the response is a table of data in one of various formats (XML, CSV, etc.) for a SELECT query, and triples formatted in RDF/XML or Turtle for a CONSTRUCT query.</p>
+<p class="calibre1"><i class="calibre8">Status codes</i> are three-digit integers whose meanings are defined by the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616.html">HTTP specification</a>; for instance, the standard response to a successful request has the code "200".</p>
+<p class="calibre1">Figure 9 shows a possible encoding of the HTTP GET request for a simple query. The details are not important for this chapter, but it is worth noting the final line (starting with "Accept"), which lists the media types that the sender can understand, with preference ratings expressed as numbers between 0.0 and 1.0. This is called <i class="calibre8">content negotiation</i>, and is also part of the HTTP specification.</p>
+<p class="calibre1"><img src="get.png" alt="Web Generations" class="calibre14"/></p>
+<p class="calibre1"><em class="calibre8">Figure 9: Encoding of a GET request</em></p>
+
+</body></html>

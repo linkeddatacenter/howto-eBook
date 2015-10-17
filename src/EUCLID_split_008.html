@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h1 id="calibre_toc_5" class="calibre2">
+	<a class="calibre11" id="part2"></a>Part II: Introduction to Linked Data</h1>
+<p class="calibre1">In 2006 Berners-Lee wrote an influential note suggesting principles for the publication of data on the semantic web. The original text can be found at this web address:</p>
+<pre class="calibre16">http://www.w3.org/DesignIssues/LinkedData
+</pre>
+<p class="calibre1">Since then the volume of data has grown from around 2 billion triples in 2007 to over 30 billion in 2011, interconnected by over 500 million RDF links, the main purpose of which is to establish chains of URIs that refer to the same individuals. Through such links, published datasets are combined into a vast body of data known as a "cloud".</p>
+<p class="calibre1"><a href="cloud07.png"><img src="cloud07.png" alt="RDF graph" class="calibre14"/></a></p>
+<p class="calibre1"><em class="calibre8">Figure 5: Linked data cloud (2007)</em><br class="calibre10"/>
+	<em class="calibre8">Source: <a href="http://lod-cloud.net/">http://lod-cloud.net</a></em><br class="calibre10"/>
+	<em class="calibre8">Citation: Linking Open Data cloud diagram (2007), by Richard Cyganiak and Anja Jentzsch. <a href="http://lod-cloud.net/">http://lod-cloud.net</a></em><br class="calibre10"/>
+	<em class="calibre8">License: CC-BY-SA</em></p>
+<p class="calibre1">Figure 5 shows a diagram of the linked data cloud for 2007, in which nodes represent published datasets, and links represent sets of RDF triples through which the URIs in one dataset are paired with their counterparts in another dataset. Thus the link from DBpedia to MusicBrainz means that DBpedia includes not only RDF triples that give informaton about the world, but also triples that link some DBpedia names to their synonyms in MusicBrainz. We have seen examples of such statements in the last section, including the following triple which links the two names for the Beatles.</p>
+<pre class="calibre16">&lt;http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d&gt;
+&lt;http://www.w3.org/2002/07/owl#sameAs&gt;
+&lt;http://dbpedia.org/resource/The_Beatles&gt;.
+</pre>
+<p class="calibre1">Note that since the "sameAs" relation is transitive and commutative, two statements of the form "X sameAs Y" and "Y sameAs Z" (or equivalently "Z sameAs Y") can be combined to infer "X sameAs Z"; in this way, lists of synonymous names can be derived from the cloud.</p>
+<h3 id="calibre_toc_157" class="calibre13">
+	Principles</h3>
+<p class="calibre1">In his 2006 note, Berners-Lee set out four simple principles for publishing data on the web. These are best seen as rules of best practice rather than rules that must be obeyed: the idea is that the more people follow these principles, the more their data will be usable by others.</p>
+<p class="calibre1">In brief, the principles are as follows:</p>
+<ol class="calibre21">
+	<li class="calibre4">
+		Use URIs to identify things.</li>
+	<li class="calibre4">
+		Use HTTP URIs so that people can look up those names.</li>
+	<li class="calibre4">
+		When someone looks up a URI, provide useful information, using the standards (RDF, RDFS, SPARQL).</li>
+	<li class="calibre4">
+		Include links to other URIs, so that they can discover more things.</li>
+</ol>
+<p class="calibre1">The rationale for these principles is probably obvious. By using URIs to identify individuals, classes, and properties, we obtain names that perform a double duty: as well as referring to the relevant thing, they give us a location on the web where we may look for information about that thing. Other naming schemes accomplish only the first of these duties. However, to obtain benefit from a name that also serves as a web address, the URI should not be a broken link. It should point to relevant information, encoded in one of the expected formats. This benefit will be enhanced further if the information includes URIs that point to other locations on the web from which additional relevant information might be recovered.</p>
+<h3 id="calibre_toc_158" class="calibre13">
+	Rating published datasets</h3>
+<p class="calibre1">In 2010 Berners-Lee extended the note referenced above to propose a system for rating datasets, based on the five-star rating system used for hotels. Closely related to the principles just listed, the system is as follows:</p>
+<ul class="calibre3">
+	<li class="calibre4">
+		One-star (*): The data is available on the web with an open license.</li>
+	<li class="calibre4">
+		Two-star (**): The data is structured and machine-readable.</li>
+	<li class="calibre4">
+		Three-star (***): The data does not use a proprietary format.</li>
+	<li class="calibre4">
+		Four-star (****): The data uses only open standards from W3C (RDF, SPARQL).</li>
+	<li class="calibre4">
+		Five-star (*****): The data is linked to that of other data providers.</li>
+</ul>
+<p class="calibre1">Note that every level here includes the previous levels: thus for instance three-star data must also be available on the web in machine-readable form.</p>
+
+<h3 id="calibre_toc_159" class="calibre13">
+	Growth of linked data on the web</h3>
+<p class="calibre1">We have shown above a diagram of the linked data cloud for 2007 (Figure 5). For comparison, Figure 6 shows the corresponding diagram for 2014 (the last year for which we have data), showing the expansion that has taken place during these years. The picture is just considering dataset reachable by <a href="lod-cloud.net">lod-cloud.net</a> crawler and today it is <b>VERY</b> partial.</p>
+<p class="calibre1"><a href="lod-cloud.jpg"><img src="lod-cloud.jpg" alt="RDF graph" class="calibre14"/></a></p>
+<p class="calibre1"><em class="calibre8">Figure 6: Linked data cloud (2014)</em><br class="calibre10"/>
+	<em class="calibre8">Source: <a href="http://lod-cloud.net/">http://lod-cloud.net</a></em><br class="calibre10"/>
+	<em class="calibre8">Citation: Linking Open Data cloud diagram (2014), by Richard Cyganiak and Anja Jentzsch. <a href="http://lod-cloud.net/">http://lod-cloud.net</a></em><br class="calibre10"/>
+	<em class="calibre8">License: CC-BY-SA</em></p>
+<p class="calibre1">The colours on this diagram provide a broad categorisation of the domains of the various datasets. </p>
+</body></html>

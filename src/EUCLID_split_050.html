@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h1 id="calibre_toc_23" class="calibre2">
+	<strong class="calibre80"><a class="calibre11"></a>Part I: Linked Data Visualization</strong></h1>
+<h2 id="calibre_toc_71" class="calibre7">
+	4.3 LD Visualization Techniques</h2>
+<p class="calibre1">Linked Data visualization techniques aim to provide graphical representations of some information of interest within a dataset. Visualizations need to be selected that match the type of data, for example whether it be numerical data or location information. Visualizations also need to be selected that match the task that the user is trying to perform, bringing to the foreground the types of data and patterns in the data that they wish to work with.</p>
+<p class="calibre1">Figure 3 illustrates the way in which raw RDF data needs to be transformed to produce visualizations. First, the data of interest is extracted from the dataset. Performing a SPARQL query can do this. Second, the data needs to be transformed in order that it can be displayed with the intended visualization methods. A simple example would be to extract a numerical value from a string so that it could then be visualized on a bar chart. Third, the data needs to be mapped to the constructs of the visualization. For example, the numerical value could be mapped to the y-axis of a bar chart. The view resulting form this process may not be a static image. It may provide ways in which the user can interact with the data, by zooming or clicking to trigger further visualizations.</p>
+<p class="calibre1"><img src="chapter4_image006.png" alt="" class="calibre81"/></p>
+<p class="calibre1"><em class="calibre8">Figure 3: Linked Data visualization process (partially based on [3])</em></p>
+<p class="calibre1">An example of the Linked Data visualization process is shown in figure 4. A SPARQL query is used to extract the data of interest from the MusicBrianz dataset, in this case the number of Beatles releases per country. In the second step the string value representing the country is transformed into a country code that can be used on the visualization. In the third step, this data is passed to a heatmap visualization. The country code is used to identify an area on the map. The number of releases is mapped to the warmth of the colour of that region. The resulting heatmap is shown in figure 5.</p>
+<p class="calibre1"><img src="chapter4_image008_0.png" alt="" class="calibre82"/></p>
+<p class="calibre1"><em class="calibre8">Figure 4. Example of the Linked Data visualization process.</em></p>
+<p class="calibre1"><img src="chapter4_image009.png" alt="" class="calibre83"/></p>
+<p class="calibre1"><em class="calibre8">Figure 5: Heatmap visualization of Beatles releases.</em></p>
+</body></html>

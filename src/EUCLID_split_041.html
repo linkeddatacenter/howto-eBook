@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 class="calibre9" id="calibre_toc_65">
+	<span class="calibre11">3.9.1 Extracting data from Spreadsheets: OpenRefine</span></h2>
+<p class="calibre1"><span>First, we will look at how RDF data can be created from tabular data such as that found in spreadsheets. This relates to the part of the architecture shown in Figure 3.26. Tabular data can be represented in a number of common formats. CSV (Comma Separated Values) and TSV (Tab Separated Values) are two common plain text formats for representing tables. Tables can also be represented in HTML and in spreadsheet applications. Tabular data can also be represented in JSON (Javascript Object Notation), originally developed for use with the Javascript language and now a common data interchange format on the Web.</span></p>
+<p class="calibre1"><span>The transformation of tabular data to an RDF dataset will involve mapping items mentioned in tables to existing vocabularies, interlinking to entities for other datasets and to some extent data cleansing where alternative names or mistyped names for items mentioned in the tables need to be handled.</span></p>
+<p class="calibre1"><span><img src="image052.png" alt="" class="calibre54"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 26: Integrating chart data.</em></p>
+<p class="calibre1"><span>Below we can see an example of data represented in CSV format. This shows sales data for a number of music artists. Each row is divided into two cells by the comma. So, for example, the first row tells us that The Beatles have sold 50 million records. Elvis Presley is not far behind with 203.3 million records.</span></p>
+<p class="calibre1"><span>The Beatles, 250 million</span></p>
+<p class="calibre1"><span>Elvis Presley, 203.3 million</span></p>
+<p class="calibre1"><span>Michael Jackson, 157.4 million</span></p>
+<p class="calibre1"><span>Madonna, 160.1 million</span></p>
+<p class="calibre1"><span>Led Zeppelin, 135.5 million</span></p>
+<p class="calibre1"><span>Queen, 90.5 million</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>Below we can see the first row of sales data represented in JSON format. Here the rank order of the artists based on sales is made explicit as an additional column in the data. The cells in the data also have labels, reflecting the column labels you might find in a HTMTL table, and which are also implicit in the CSV format. </span></p>
+<p class="calibre1"><span>{ </span></p>
+<p class="calibre1"><span>   "artist": { </span></p>
+<p class="calibre1"><span>     "class": "artist", </span></p>
+<p class="calibre1"><span>     "name": "The Beatles" </span></p>
+<p class="calibre1"><span>   }, </span></p>
+<p class="calibre1"><span>   "rank": 1, </span></p>
+<p class="calibre1"><span>   "value": 250 million</span></p>
+<p class="calibre1"><span> }, </span></p>
+<p class="calibre1"><span> …</span></p>
+<p class="calibre1"><span> </span></p>
+<p class="calibre1"><span>Finally, in Figure 27 we see sales data represented as a HTML table. Here we have explicit column labels and also additional information related to the active period and first release of each artist. </span></p>
+<p class="calibre1"><span><img src="image054.png" alt="" class="calibre55"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 27: List of best-selling music artists (from [23]).</em></p>
+<p class="calibre1"><span>We will now look at how <i class="calibre8">OpenRefine</i> [24] can be used to translate tabular formats to RDF. The OpenRefine tool was originally developed by the company Metaweb as a way of extracting data for Freebase, a vast collaborative knowledgebase of structured data. This tool later became GoogleRefine and was then renamed OpenRefine when released as an open source project. When using OpenRefine, the first step is to create a project and import tabular data in a format such as Microsoft Excel or CSV.</span></p>
+<p class="calibre1"><span><img src="image056.png" alt="" class="calibre56"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 28: Importing data to OpenRefine.</em></p>
+<video width="500" controls="" height="281">
+  <source src="euclid-chapter3-openrefine.m4v" type="video/mp4"/>
+Your browser does not support the video tag.
+</video>
+<p class="calibre1"><em class="calibre8"><span>Movie 5:</span><span> Screencast of OpenRefine.</span></em></p>
+<p class="calibre1"><span>As illustrated in Figure 3.29, OpenRefine assists us in transforming a tabular format such as CSV to RDF data. A number of processes are involved in this transformation. First, we can see that the serialisation has changed from comma-separated rows of data to RDF data in Turtle format. Second, the artists listed in the first column have been transformed from text strings to MusicBrainz URIs. Third, the sales figures have been transformed to a number with an integer data type. Finally, we have a relation (totalSales) linking the artist to the number. We will now look step-by-step at how this transformation is carried out.</span></p>
+<p class="calibre1"><span><img src="image058.png" alt="" class="calibre57"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 29: Translating CSV data to RDF.</em></p>
+<p class="calibre1"><span>The first step involves defining the rows and columns of the dataset. This can involve deleting columns not required in the RDF data and splitting columns based on specified conditions. To help with this process OpenRefine provides a powerful expression language called OpenRefine Expression Language. This has a number of functions for dealing with different types of data such as Booleans, strings, and mathematical expressions. The OpenRefine Expression Language is also still often known by the acronym <i class="calibre8">GREL</i>. This dates back to when it was known as the Google Refine Expression Language.</span></p>
+<p class="calibre1"><span>In the example of Figure 3.30, we used GREL to split the word “million” from the number in Column 2 to create Columns 2 2 and 2 3. We then multiply Column 2 2 by the number 1,000,000 to create the Total Sales column. </span></p>
+<p class="calibre1"><span><img src="image060.png" alt="" class="calibre58"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 30: Data transformation in OpenRefine.</em></p>
+<p class="calibre1"><span>We then need to map the artists listed in Column 1 to MusicBrainz URIs. For this we can use the RDF Refine plugin developed by DERI (<a href="http://www.deri.ie"><span>www.deri.ie</span></a>). The process of mapping between multiple representations of the same thing (in this case artists represented by a string and a MusicBrainz URI) is known as <i class="calibre8">entity reconciliation</i>. Entity reconciliation can be carried out against the SPARQL endpoint of an RDF dataset. Textual names for things (such as The Beatles) are matched against the text labels associated with the entities in the dataset. In the figure the artist names have been reconciled with the MusicBrainz URIs listed in a column headed musicbrainz-id.</span></p>
+<p class="calibre1"><span><img src="image062.png" alt="" class="calibre59"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 31: Entity reconciliation in OpenRefine.</em></p>
+<p class="calibre1"><span>The data is then transformed into RDF triples. In the example of Figure 3.32, we have specified that a triple should be generated for each row in which the MusicBrainz URI is connected to the Total Sales data by the totalSales property. The RDF Preview tab shows what the first 10 rows of data will look like as RDF triples.</span></p>
+<p class="calibre1"><span><img src="image064.png" alt="" class="calibre60"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 32: Previewing RDF triples in OpenRefine.</em></p>
+</body></html>

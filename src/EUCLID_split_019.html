@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h1 id="calibre_toc_8" class="calibre2">
+	<a class="calibre11"></a>Part II: Updating Linked Data with SPARQL 1.1</h1>
+<p class="calibre1">We now turn to queries that <i class="calibre8">modify</i> datasets by adding or removing data; these were not available in the original 2008 standard, but are provided for in the SPARQL 1.1 recommendation. To understand how they work, it is useful first to review how datasets are organised.</p>
+<p class="calibre1">Every SPARQL query engine has an associated RDF dataset on which queries are normally run. The dataset is sometimes called a <i class="calibre8">graph store</i>, because it is organised as a collection of RDF graphs rather than a single graph. One of these graphs is called the <i class="calibre8">default graph</i> of the dataset, and has no name. The other graphs, if present, are called <i class="calibre8">named graphs</i>, each of which is identified by an IRI. Thus a dataset must have a default graph, and in addition may have any number of named graphs – including none.</p>
+<p class="calibre1">The main update operations provided are as follows:</p>
+<ul class="calibre3">
+	<li class="calibre4">
+		Deleting data from one of the graphs in the graph store.</li>
+	<li class="calibre4">
+		Inserting data into one of the graphs in the store.</li>
+	<li class="calibre4">
+		Loading the content of another graph into a graph in the store.</li>
+	<li class="calibre4">
+		Clearing all triples from a graph in the store.</li>
+</ul>
+<p class="calibre1">Unfortunately, to protect the datasets, query update is not supported by public endpoint. LinkedData.Center  provides you with a private, password protected endpoint .</p>
+
+<h3 id="calibre_toc_181" class="calibre13">
+	Adding data to a graph</h3>
+<p class="calibre1">Suppose you have a graph containing data about the Beatles, in which Peter Best is included as a member of the band. If we assume that the graph is meant to describe the band as it was in the mid 1960s, when the Beatles were at their most active and famous, then this information would be out-of-date; we might want to describe Peter Best as a <i class="calibre8">former</i> band member, but not a current one. Here is a query that will achieve the first part of this objective, by describing Peter Best as a former band member:</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX db-ont: &lt;http://dbpedia.org/ontology/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+INSERT { dbpedia:The_Beatles db-ont:formerMember ?x }
+WHERE  { dbpedia:The_Beatles db-ont:currentMember ?x .
+        ?x foaf:name "Peter Best"
+       } 
+</pre>
+<p class="calibre1">This query is very similar in syntax to the queries we examined in section 2.4, especially CONSTRUCT and DESCRIBE queries. The query form in this case is INSERT, and like CONSTRUCT it is followed by a graph pattern that specifies a set of RDF triples, given bindings for any variables that are included in the pattern. These bindings, as before, are obtained through a WHERE clause. In this simple example, we assume that the person formulating the query does not know the IRI naming the resource Peter Best, and accordingly retrieves it from the dataset using the <span class="calibre28">foaf:name</span> relation to the literal "Peter Best". Once the relevant IRI is plugged into the single triple following INSERT, we obtain an exact specification of an RDF triple (with no variables). The query engine then checks whether this triple is present in the default graph, and if not, adds it. If the triple was already present in the graph, there would be no change.</p>
+<p class="calibre1">If you knew the URI for Peter Best, you could use an alternative form of the insert query with the keywords INSERT DATA. This is followed not by a graph pattern (including variables) but a set of fully specified triples; accordingly, a WHERE clause is not needed.</p>
+<p class="calibre1">If you wish the triples to be added to a named graph rather than the default graph, you can name the relevant graph at the beginning of the pattern after INSERT, as in the following slightly modified example:</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX db-ont: &lt;http://dbpedia.org/ontology/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+INSERT { GRAPH &lt;http://myFavGroups/The_Beatles&gt; 
+         { dbpedia:The_Beatles db-ont:formerMember ?x }
+       }
+WHERE  { dbpedia:The_Beatles db-ont:currentMember ?x .
+        ?x foaf:name "Peter Best"
+       } 
+</pre>
+<h3 id="calibre_toc_182" class="calibre13">
+	Deleting data from a graph</h3>
+<p class="calibre1">As in the case of inserting, you have two options: either use DELETE DATA followed by a set of RDF triples (without variables), or use DELETE followed by a graph pattern and a WHERE clause. In either case, you again have the option of indicating, within the DELETE clause, the graph from which the specified triples will be removed. If no graph is named, the triples will be removed from the default graph.</p>
+<p class="calibre1">In the following example, which would be a natural sequel to the query in 2.6.1, Peter Best is removed as a current band member from the default graph.</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX db-ont: &lt;http://dbpedia.org/ontology/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DELETE { dbpedia:The_Beatles db-ont:currentMember ?x }
+WHERE  { dbpedia:The_Beatles db-ont:currentMember ?x .
+        ?x foaf:name "Peter Best"
+       } 
+</pre>
+<h3 id="calibre_toc_183" class="calibre13">
+	Combining insertion and deletion</h3>
+<p class="calibre1">In the examples for INSERT and DELETE the aim was to replace an outdated statement (Peter Best as current member) by an up-to-date one (Peter Best as former member). When the INSERT and DELETE operations use the same variable bindings, they can be combined in a single query, sharing the same WHERE clause, as follows:</p>
+<pre class="calibre16">PREFIX dbpedia: &lt;http://dbpedia.org/resource/&gt;
+PREFIX db-ont: &lt;http://dbpedia.org/ontology/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DELETE { dbpedia:The_Beatles db-ont:currentMember ?x }
+INSERT { dbpedia:The_Beatles db-ont:formerMember ?x }
+WHERE  { dbpedia:The_Beatles db-ont:currentMember ?x .
+        ?x foaf:name "Peter Best"
+       } 
+</pre>
+<h3 id="calibre_toc_184" class="calibre13">
+	Loading an RDF graph</h3>
+<p class="calibre1">You might wish to extend your dataset by loading triples from an external dataset for which you have the URL. This can be done using the LOAD query, which has the following simple basic syntax:</p>
+<pre class="calibre16">LOAD &lt;http://xmlns.com/foaf/spec/20100809.rdf&gt;
+</pre>
+<p class="calibre1">This will retrieve all triples from the specified external web source – if it exists – and copy them into the default graph of your query engine. If you want instead to copy them into a named graph you can use the keyword INTO to specify the graph name:</p>
+<pre class="calibre16">LOAD &lt;http://xmlns.com/foaf/spec/20100809.rdf&gt;
+INTO &lt;http://myFavGroups/The_Beatles&gt;
+</pre>
+<h3 id="calibre_toc_185" class="calibre13">
+	Clearing an RDF graph</h3>
+<p class="calibre1">If you want to retain a graph in the store as a location into which you can load and insert data, but to repopulate it from scratch by clearing out its current triples, you can use a CLEAR query with the following simple syntax:</p>
+<pre class="calibre16">CLEAR GRAPH &lt;http://myFavGroups/The_Beatles&gt;
+</pre>
+<p class="calibre1">The keyword GRAPH is employed when you identify the graph to be cleared using its IRI. Alternatives are CLEAR DEFAULT, which clears the default graph, CLEAR NAMED, which clears the graph with the specified name, and CLEAR ALL, which clears all graphs in the store. Thus the following would be a complete query removing all triples from the query engine's default graph:</p>
+<pre class="calibre16">CLEAR DEFAULT
+</pre>
+<h3 id="calibre_toc_186" class="calibre13">
+	Adding and removing graphs</h3>
+<p class="calibre1">SPARQL 1.1 allows you to manage the graphs in the query engine's store by the query forms CREATE and DROP. It is important to understand that these operate on graphs, not on triples. CLEAR removes all triples from a graph, but does not remove the graph itself; it remains in place as a location into which triples may be inserted or loaded. DROP, by contrast, removes the graph altogether from the store, so that any attempt to load or insert into it will yield an error – unless you first reinstate it using CREATE. Thus CLEAR is like removing all text from a Word document while leaving the document in place, whereas DROP is like trashing the document altogether.</p>
+<p class="calibre1">To create a new graph, just specify its IRI as follows:</p>
+<pre class="calibre16">CREATE GRAPH &lt;http://myFavGroups/The_Beatles&gt;
+</pre>
+<p class="calibre1">To drop an existing graph, use the same syntax with DROP instead of CREATE:</p>
+<pre class="calibre16">DROP GRAPH &lt;http://myFavGroups/The_Beatles&gt;
+</pre>
+<h3 id="calibre_toc_187" class="calibre13">
+	Other graph management operations</h3>
+<p class="calibre1">If you are working with several graphs in a store, you might wish to copy or move information from one to another. For instance, when starting a new version of a named graph, you might first create a new (empty) graph for version 2, and then wish to copy across the entire contents of version 1. This is done as follows:</p>
+<pre class="calibre16">COPY GRAPH &lt;http://myFavGroups/The_Beatles/v1&gt;
+TO GRAPH &lt;http://myFavGroups/The_Beatles/v2&gt;
+</pre>
+<p class="calibre1">Note that version 1 remains unchanged by this operation, which is like copying text from one document and pasting it into another document, <i class="calibre8">overwriting any text already in the second document</i>. This means that after the COPY operation is performed, the two graphs will have exactly the same triples.</p>
+<p class="calibre1">If the source graph is a draft that you have no more use for, you can use the MOVE command, which first copies all triples from the first graph to the second, and then removes the first graph altogether – equivalent to performing COPY followed by DROP:</p>
+<pre class="calibre16">MOVE GRAPH &lt;http://myFavGroups/The_Beatles/draft&gt;
+TO GRAPH &lt;http://myFavGroups/The_Beatles/v1&gt;
+</pre>
+<p class="calibre1">This is like copying text from one document to another, overwriting any text in the second document, <i class="calibre8">and then trashing the first document</i>.</p>
+<p class="calibre1">If you want to retain triples already present in the destination graph, you can use the ADD command, which is the same as COPY except that triples from the source graph are added to the destination graph without overwriting. You might do this, for example, if you have been constructing separate graphs for different rock groups (The Beatles, The Rolling Stones, etc.), and now wish to add your Beatles data to a larger graph covering all your favourite rock groups:</p>
+<pre class="calibre16">ADD GRAPH &lt;http://myFavGroups/The_Beatles&gt;
+TO GRAPH &lt;http://myRockGroups&gt;
+</pre>
+<p class="calibre1">Like COPY, this operation leaves the source graph unchanged. It is like copying text from a document and pasting it into another document <i class="calibre8">without overwriting the text already present there</i>.</p>
+<p class="calibre1">For all these operations, a destination graph will be created automatically if it does not exist already.</p>
+</body></html>

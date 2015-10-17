@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h1 id="calibre_toc_4" class="calibre2">
+	<a class="calibre11" id="part1"></a>Part I: Semantic Technologies and Linked Data Foundations</h1>
+<p class="calibre1">We will describe a set of technologies that allows datasets to be published over the web, and queried effectively by applications. Compared with search engines such as Google and Yahoo, which are based on text-string matching, these technologies are "semantic". This means that information is represented not in a natural language like English or Spanish, but in a graph-based data model that facilitates extension, integration, inference and uniform querying. As a realistic application of semantic technologies, we consider the provision of a portal through which users can retrieve resources and information in the world of music. Consider for example the following tasks:</p>
+<ul class="calibre3">
+	<li class="calibre4">
+		Retrieve a performance of the Beethoven violin concerto by a Chinese orchestra</li>
+	<li class="calibre4">
+		Retrieve a photograph of the conductor of this performance</li>
+	<li class="calibre4">
+		List male British rock musicians married to Scandinavians</li>
+</ul>
+<p class="calibre1">Attempts to answer such queries through text-based search are unreliable: we might equally retrieve a performance in which the soloist was Chinese, or a rock musician that plays Scandinavian music. Using semantic technologies, resources such as the audio file of the performance, or the photograph of the conductor, can be annotated using the Resource Description Framework (RDF). In this framework, formal names can be assigned to what are called <i class="calibre8">resources</i>, which would include Beethoven, his violin concerto, the orchestra, and the conductor. Names can also be assigned to types (or <i class="calibre8">classes</i>) of resource (composers, concertos, etc.), and to relationships (or <i class="calibre8">properties</i>) that link resources (e.g., the "composed-by" relationship between composition and composer). By reasoning over facts encoded in this way, a query system can confirm that a performance was given by the Beijing Symphony Orchestra, that this orchestra is based in Beijing, that Beijing is located in China, and so forth -- thus combining geographical and musical knowledge in order to retrieve an answer.</p>
+<p class="calibre1">In designing these semantic technologies, a key design decision was to leave open the naming of resources and properties, provided that names conform to the format for web resource names -- that is, provided they are Uniform Resource Identifiers or URIs.</p>
+<blockquote class="calibre12">
+	http://rdf.freebase.com/ns/en.ludwig_van_beethoven<br class="calibre10"/>
+	http://dbpedia.org/resource/Ludwig_van_Beethoven<br class="calibre10"/>
+	http://musicbrainz.org/artist/1f9df192-a621-4f54-8850-2c5373b7eac9#_<br class="calibre10"/>
+	http://data.nytimes.com/N30866506154608358173</blockquote>
+<p class="calibre1">All four of the above could be names for Beethoven, illustrating that the URI need not be human-readable (e.g., it might be an arbitrary string of letters and numbers), although identifiers should be resolvable to RDF representations that include human-readable labels, as explained below. If data from different sources are to be combined, it is therefore important to establish links, for instance through statements indicating that the above four URIs are synonymous. These statements, which can also be expressed in RDF, provide a means by which data published by many people or organisations can be combined into linked data.</p>
+<p class="calibre1">In the following chapters, we will show through practical examples how to describe resources in RDF, how to convert data from other formats to RDF, how to publish RDF data, and how to link published RDF to other datasets. We will also consider how to utilize existing linked data in applications for querying, analysis, mining, and visualisation. </p>
+
+</body></html>

@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 class="calibre9" id="calibre_toc_59">
+	<span class="calibre11">3.6.1 Providing metadata about the dataset</span></h2>
+<p class="calibre1"><span>A published RDF dataset should have metadata about itself that can be processed by search engines. This metadata allows for:</span></p>
+<ul class="calibre3">
+	<li class="calibre4">
+		<span>Efficient and effective search of datasets.</span></li>
+	<li class="calibre4">
+		<span>Selection of appropriate datasets (for consumption or interlinking).</span></li>
+	<li class="calibre4">
+		<span>Acquiring general statistics about the dataset such as its size.</span></li>
+</ul>
+<p class="calibre1"><span>The frequently used vocabulary for describing RDF datasets is <i class="calibre8">VoID (Vocabulary of Interlinked Datasets) </i>[13]. An RDF dataset is expressed as being of the type void:Dataset. </span></p>
+<p class="calibre1"><span>The VoID schema covers four types of metadata:</span></p>
+<ol class="calibre21">
+	<li class="calibre4">
+		<span>General metadata</span></li>
+	<li class="calibre4">
+		<span>Structural metadata</span></li>
+	<li class="calibre4">
+		<span>Descriptions of linksets</span></li>
+	<li class="calibre4">
+		<span>Access metadata</span></li>
+</ol>
+<p class="calibre1"><span><i class="calibre8">General metadata</i></span></p>
+<p class="calibre1"><span>General metadata is intended to help users identify appropriate datasets. This contains general information such as the title, description and publication date. It also identifies contributors, creators and authors of the dataset. The VoID schema makes use of both Dublin Core and FOAF predicates. A list of general VoID properties is shown in Figure 7.</span></p>
+<p class="calibre1"><span><img src="image014.png" alt="" class="calibre35"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 7: VoID General metadata.</em></p>
+<p class="calibre1"><span>The VoID general metadata also describes licencing terms of the dataset using the dcterms:licence property (see [14] for a discussion of licensing issues). The topics and domains of the data are expressed using the dcterms:subject property. The property void:feature can be used to express technical features of the dataset such as its serialisation formats (e.g. RDF/XML, Turtle).</span></p>
+<p class="calibre1"><span><i class="calibre8">Structural metadata</i></span></p>
+<p class="calibre1"><span>This provides high-level information about the internal structure of the dataset. This metadata is useful when exploring or querying the dataset and includes information about resources, vocabularies used in the dataset, statistics and examples of resources in the dataset.</span></p>
+<p class="calibre1"><span>In the example below a URI (which happens to represent The Beatles) is identified as being an example resource in the MusicBrainz dataset.</span></p>
+<p class="calibre1"><span>:MusicBrainz a void:Dataset;</span></p>
+<p class="calibre1"><span>   void:exampleResource</span></p>
+<p class="calibre1"><span>     &lt;<a href="http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d"><span>http://musicbrainz.org/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d</span></a>&gt; .</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>It is also possible to specify the string that prefixes all new entity URIs created in the dataset. Below, all new entities in the MusicBrainz dataset are specified as beginning with the string <a href="http://musicbrainz.org"><span>http://musicbrainz.org</span></a>/.</span></p>
+<p class="calibre1"><span>:MusicBrainz a void:Dataset;</span></p>
+<p class="calibre1"><span>   void:uriSpace "<a href="http://musicbrainz.org"><span>http://musicbrainz.org</span></a>/" .</span></p>
+<p class="calibre1"><span>The property void:vocabulary identifies the most relevant vocabularies used in the datset. It is not intended to be an exhaustive list. The example below states that the Music Ontology is a vocabulary used by the MusicBrainz dataset. This property can only be used for entire vocabularies. It cannot be used to state that a subset of the vocabulary occurs in the dataset. </span></p>
+<p class="calibre1"><span>:MusicBrainz a void:Dataset;</span></p>
+<p class="calibre1"><span>   void:vocabulary &lt;<a href="http://purl.org/ontology/mo/"><span>http://purl.org/ontology/mo/</span></a>&gt; .</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>A further set of properties are used to express statistics about the dataset such as the number of classes, properties and triples. These statistics can also be expressed for any subset of the dataset.</span></p>
+<p class="calibre1"><span><img src="image015.png" alt="" class="calibre36"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 8: VoID statistics about a dataset.</em></p>
+<p class="calibre1"><span>The void:subset property is defines parts of a dataset. The example below states that MusicBrainzArtists is a subset of the MusicBrainz dataset.</span></p>
+<p class="calibre1">:MusicBrainz a void:Dataset;</p>
+<p class="calibre1"><span>  void:subset :. MusicBrainzArtists</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>The properties void:classPartition and void:propertyPartition are subproperties of void:subset. A subset that is the <i class="calibre8">void:classPartition</i> of another dataset contains only triples that describe entities that are individuals of this class. A subset that is the <i class="calibre8">void:propertyPartition</i> of another dataset contains only triples using that property as the predicate. A class partition has exactly one void:class property. Similarly, a property partition has exactly one void:property property. The example below asserts that there is a class partition of MusicBrainz containing triples describing individuals of mo:Release. It also asserts that there is a property partition that contains triples using mo:member as the predicate.</span></p>
+<p class="calibre1"><span>:MusicBrainz a void:Dataset;</span></p>
+<p class="calibre1"><span>  void:classPartition [ void:class mo:Release .] ;</span></p>
+<p class="calibre1"><span>  void:propertyParition [ void:property mo:member .] .</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span><i class="calibre8">Descriptions of linksets</i></span></p>
+<p class="calibre1"><span>A <i class="calibre8">linkset</i> is a set of RDF triples in which the subject and object are described in different datasets. A linkset is therefore a collection of links between two datasets. The RDF links in a linkset often use the owl:sameAs predicate to link the two datasets. In the example below, LS1 is declared as a subset of the DS1 dataset. LS1 is a linkset using the owl:sameAs predicate. The linkset declares sameAs relations to entities in another dataset (DS2).</span></p>
+<p class="calibre1"><span><img src="image017.png" alt="" class="calibre37"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 9: A collection of links between two datasets. Based on [15].</em></p>
+<p class="calibre1"><span>In the MusicBrainz example below a class partition named MBArtists is defined. This is a linkset that has skos:exactMatch links between MusicBrainz and DBpedia.</span></p>
+<p class="calibre1"><span>@PREFIX void:&lt;<a href="http://rdfs.org/ns/void#"><span>http://rdfs.org/ns/void#</span></a>&gt; </span></p>
+<p class="calibre1"><span> @PREFIX skos:&lt;<a href="http://www.w3.org/2002/07/owl#"><span>http://www.w3.org/2002/07/owl#</span></a>&gt;</span></p>
+<p class="calibre1"><span> </span></p>
+<p class="calibre1"><span> :MusicBrainz a void:Dataset .</span></p>
+<p class="calibre1"><span> :DBpedia a void:Dataset .</span></p>
+<p class="calibre1"><span> </span></p>
+<p class="calibre1"><span> :MusicBrainz void:classPartition :MBArtists .</span></p>
+<p class="calibre1"><span> :MBArtists void:class mo:MusicArtist .</span></p>
+<p class="calibre1"><span> </span></p>
+<p class="calibre1"><span> :MBArtists a void:Linkset;</span></p>
+<p class="calibre1"><span>      void:linkPredicate </span></p>
+<p class="calibre1"><span>        skos:exactMatch; </span></p>
+<p class="calibre1"><span>      void:target :MusicBrainz, :DBpedia .</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span><i class="calibre8">Access metadata</i></span></p>
+<p class="calibre1"><span>The VoID schema can also be used to describe methods for accessing the dataset, for example the location of a URI where entities in the dataset can be inspected, a SPARQL endpoint or file containing the data. The predicate void:rootResource can be used to express the top terms in a hierarchically structured dataset.</span></p>
+<p class="calibre1"><span><img src="image019.png" alt="" class="calibre38"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 10: Methods for accessing metadata.</em></p>
+</body></html>

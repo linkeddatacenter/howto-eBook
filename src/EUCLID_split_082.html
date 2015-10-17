@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_102" class="calibre9">
+	5.6 Architectural patterns</h2>
+<p class="calibre1">The data consumed and integrated within the application may be accessed in a number of ways. Three main architectural patterns can be identified. First, there is the <em class="calibre8">crawling pattern</em>, in which data is loaded in advance. The data may also need to be transformed as described above. The data is managed in one triplestore so that it can be accessed efficiently. The disadvantage of this pattern is that the data might not be up to date. Second, there is the <em class="calibre8">On-The-Fly Dereferencing Pattern</em>. Here, URIs are dereferenced at the moment that the application requires the data. This pattern retrieves up to date data but performance is affected when the application must dereference many URIs. Third, there is a <em class="calibre8">(Federated) Query Pattern</em> in which complex queries are submitted to a fixed set of data sources. This approach enables applications to work with current data directly retrieved from the sources. However, finding optimal query execution plans over a large number of sources is a complex problem. This third pattern in specific situations can offer a way of accessing up-to-date data with adequate response times.</p>
+</body></html>

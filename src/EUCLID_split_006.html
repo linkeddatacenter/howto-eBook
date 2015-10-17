@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_40" class="calibre9">
+	Background technologies</h2>
+<p class="calibre1">Linked data results from a confluence of earlier ideas and technologies, including hypertext, databases, ontologies, markup languages, the Internet, and the World Wide Web. In this section we provide background information on these technologies.</p>
+
+<h3 id="calibre_toc_142" class="calibre13">
+	Internet</h3>
+<p class="calibre1">The Internet is an extension of the technology of computer networks. The earliest computers operated independently. In the 1960s and 1970s, it became common for computers in an organisation (e.g., university, government, company) to be linked together in a network. At the same time, there were early experiments in linking whole networks together, including the ARPANET in the United States. In the early 1980s, the Internet Protocol Suite (TCP/IP) for the ARPANET was standardised, to provide the basis for a <i class="calibre8">network of networks</i> that could embrace the whole world. The Internet spread mostly to Europe and Australia during the 1980s, and to the rest of the world during the 1990s.</p>
+<p class="calibre1">The technology supporting the Internet includes the IP (Internet Protocol) system for addressing computers, so that messages can be routed from one computer to another. Each computer on the Internet is assigned an IP number which can be written as four integers from 0--255 separated by dots, e.g. 185.56.200.4. (To be precise, this convention holds for version 4 of the IP, but not the more recent version 6.) The structure of messages is governed by application protocols that vary according to the service required (e.g., email, telephony, file transfer, hypertext). Examples of such protocols are FTP (File Transfer), USENET, and HTTP (HyperText Transfer).</p>
+<h3 id="calibre_toc_143" class="calibre13">
+	Hypertext</h3>
+<p class="calibre1">The concept of hypertext is normally dated from Bush and Wang's 1945 article "As we may think" [1], which proposed an organisation of external records (books, papers, photographs) corresponding to the association of ideas in human memory. By the 1960s, with more advanced computer technology, this concept was implemented by pioneers such as Douglas Engelbart and Ted Nelson in programs that allowed texts (or other media) to be viewed with some spans marked as <i class="calibre8">hyperlinks</i>, through which the reader could jump to another document.</p>
+<h3 id="calibre_toc_144" class="calibre13">
+	World Wide Web</h3>
+<p class="calibre1">Informally people often use the terms "Internet" and "World Wide Web" (WWW) interchangeably, but this is inaccurate: the WWW is in fact just one of many services delivered over the Internet. The distinctive feature of the WWW is that it is a <i class="calibre8">hypertext</i> application, which exploits the Internet to allow cross-linking of documents all over the world.</p>
+<p class="calibre1">The formal proposal for the WWW, and prototype software, were produced in 1990 by Tim Berners-Lee [2], and elaborated over the next few years. The basic idea is that a client application called a web browser obtains access to a document stored on another computer by sending a message, over the Internet, to a web server application, which sends back the source code for the document. Documents (or web pages) are written in the Hypertext Markup Language (HTML), which allows some spans to be marked as hyperlinks to a document at a specified location in the web, named using a Universal Resource Locator (URL). When the user clicks on a hyperlink, the browser finds the IP address associated with the URL, and sends a message to this IP address requesting the HTML file at the given location in the server's file system; on receipt, this file is displayed in the browser.</p>
+<p class="calibre1"><a href="webdiagram.png"><img src="webdiagram.png" alt="Web Generations" class="calibre14"/></a></p>
+<p class="calibre1"><em class="calibre8">Figure 1: Development of the WWW</em><br class="calibre10"/>
+	<em class="calibre8">Source: Radar Networks &amp; Nova Spivack, 2007. <a href="http://www.radarnetworks.com/">http://www.radarnetworks.com</a></em><br class="calibre10"/>
+	<em class="calibre8">Citation: Nova Spivack's illustration of the evolution of the WWW. </em><br class="calibre10"/>
+	<em class="calibre8">License: CC (Some Rights Reserved)</em></p>
+<h3 id="calibre_toc_145" class="calibre13">
+	Web 1.0 (static)</h3>
+<p class="calibre1">In 1993 came a turning point for the WWW with the introduction of the Mosaic web browser, which could display graphics as well as text. From that date, usage of the web grew rapidly, although most users operated only as <i class="calibre8">consumers</i> of content, not producers. During this early phase of web development, sometimes called Web 1.0, web pages were mostly static documents read from a server and displayed on a client, with no options for users to contribute content, or for content to be tailored to a user's specific demands.</p>
+<h3 id="calibre_toc_146" class="calibre13">
+	Web 2.0 (dynamic)</h3>
+<p class="calibre1">Around 2000 a second phase of web development began with the increasing use of technologies allowing the user of a browser to interact with web pages and shape their content. There are basically two ways in which this can be done, known as <i class="calibre8">client-side scripting</i>, and <i class="calibre8">server-side scripting</i>.</p>
+<p class="calibre1">Client-side scripting is achieved through program code incorporated into the HTML source, typically written in Javascript. This code can be run on the user's computer, without any need for further messages to be sent to the server: hence "client-side".</p>
+<p class="calibre1">Server-side scripting is achieved through messages to the server which invoke applications capable of creating the HTML source dynamically: the document eventually displayed to the user is therefore tailored in response to a specific request rather than retrieved from a previously stored file.</p>
+<h3 id="calibre_toc_147" class="calibre13">
+	Social web</h3>
+<p class="calibre1">These Web 2.0 technologies have made possible a wide range of social web sites now familiar to everyone, including chat rooms, blogs, wikis, product reviews, e-markets, and crowdsourcing. Previously a consumer of content provided by others, the web user has now become a <i class="calibre8">prosumer</i>, capable of adding information to a web page, and in this way communicating not only with the server, but through the server with other clients as well.</p>
+<h3 id="calibre_toc_148" class="calibre13">
+	Web 3.0 (semantic)</h3>
+<p class="calibre1">During the 1990s, Berners-Lee and collaborators developed proposals for a further stage of web development known as the Semantic Web. This far-reaching concept, first publicised in a 2001 article in the Scientific American [3], is partly implemented in the current stage of web development sometimes called Web 3.0. At present we cannot see clearly what lies beyond Web 3.0, but in Figure 1 we allow for future stages in Semantic Web development by including a loosely defined further stage "Web 4.0".</p>
+<p class="calibre1">In their 2001 article, Berners-Lee and co-authors pointed out that existing web content was usable by people but not by computer applications. There were many computer applications available for tasks like planning, or scheduling, or analysis, but they worked only on data files in some standard logical format, not on information presented in natural language text. A person could plan an itinerary by looking at web pages giving flight schedules, hotel locations, and so forth, but it was not yet possible (then as now) for programs to extract such information reliably from text-based web pages. The initial aim of the Semantic Web is to provide standards through which people can publish documents that consist of data, or perhaps a mixture of data and text, so allowing programs to combine data from many datasets, just as a person can combine information from many text documents in order to solve a problem or perform a task.</p>
+<p class="calibre1"><a href="weblinks.png"><img src="weblinks.png" alt="Web Links" class="calibre15"/></a></p>
+<p class="calibre1"><em class="calibre8">Figure 2: From documents to data</em><br class="calibre10"/>
+	<em class="calibre8">Source: Own source.</em><em class="calibre8"> </em></p>
+<h3 id="calibre_toc_149" class="calibre13">
+	Ontologies</h3>
+<p class="calibre1">Datasets usually encode facts about individual objects and events, such as the following two facts about the Beatles (shown here in English rather than a database format):</p>
+<blockquote class="calibre12">
+	The Beatles are a music group<br class="calibre10"/>
+	The Beatles are a group</blockquote>
+<p class="calibre1">There is something odd about this pair of facts: having said that the Beatles are a music group, why must we add the more generic fact that they are a group? Must we list these two facts for <i class="calibre8">all</i> music groups -- not to mention all groups of acrobats or actors etc.? Must we also add all other consequences of being a music group, such as performing music and playing musical instruments?</p>
+<p class="calibre1">Ontologies allow more efficient storage and use of data by encoding <i class="calibre8">generic</i> facts about classes (or types of object), such as the following:</p>
+<blockquote class="calibre12">
+	Every music group is a group<br class="calibre10"/>
+	Every theatre group is a group</blockquote>
+<p class="calibre1">It is now sufficient to state that the Beatles (and the Rolling Stones, etc.) are music groups, and the more general fact that they are groups can be derived through inference. Ontologies thus enhance the value of data by allowing a computer application to infer, automatically, many essential facts that may be obvious to a person but not to a program.</p>
+<p class="calibre1">To allow automatic inference, ontologies may be encoded in some version of mathematical logic. There are many formal logics, which vary in expressivity (the meanings that can be expressed) and tractability (the speed with which inferences can be drawn). To be useful in practical applications it is necessary to trade expressivity for tractability, and <i class="calibre8">description logic</i>, which is implemented in the Web Ontology Language OWL, does precisely this. However, despite these restrictions on expressivity, OWL cannot yet be used efficiently for inference over very large datasets, as required by Linked Data applications. For this reason, most reasoning for Linked Data relies on the far simpler logical resources of RDF-Schema, with OWL used sparingly if at all.</p>
+</body></html>

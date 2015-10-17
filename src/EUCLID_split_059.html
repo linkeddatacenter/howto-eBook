@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h2 id="calibre_toc_80" class="calibre9">
+	4.12 Visualizing the Linking Open Data cloud</h2>
+<p class="calibre1">In chapter 3 (section 3.8.1) we looked at the <em class="calibre8">Linking Open Data</em> cloud diagram that represents connections between the Linked Open Data datasets. This is constructed by hand but there are also tools that can visualize connections between datasets.</p>
+<p class="calibre1"><img src="lod-cloud.jpg" alt="" class="calibre122"/></p>
+<p class="calibre1"><em class="calibre8">Figure 31: The Linking Open Data cloud diagram [15].</em></p>
+<p class="calibre1">Gephi is a platform for visualizing networks, graphs and hierarchies [16]. Gephi can be used to visualize the Linking Open Data cloud. As in the hand-crafted representation, dbpedia.org is the largest node in the network densely connected to other datasets. Colour as well as size is used to represent properties of the dataset. Link length is also used to encode information about the data structure.</p>
+<p class="calibre1"><img src="chapter4_image095.png" alt="" class="calibre123"/></p>
+<p class="calibre1"><em class="calibre8">Figure 32: Linking Open Data cloud generated using the Gephi platform [16].</em></p>
+<p class="calibre1">Protoviz [17] can also be used to automatically visualize the Linking Open Data cloud. The colour of the node reflects the CKAN rating for the dataset (see section 3.8.1 of chapter 3 for a description of CKAN). The intensity of the colour reflects the number of ratings. The proximity of nodes reflects the level of interconnection between the datasets. Outlying nodes in the graph could indicate broken links to other datasets or a genuine lack of semantic relatedness to other datasets [18]. Clicking on a node takes the user to the CKAN page for that dataset.</p>
+<p class="calibre1"><img src="chapter4_image097.png" alt="" class="calibre124"/></p>
+<p class="calibre1"><em class="calibre8">Figure 33: Linked Open Data Graph by Protovis [17].</em></p>
+</body></html>

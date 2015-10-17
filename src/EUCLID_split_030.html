@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<h1 class="calibre2" id="calibre_toc_13">
+	<span class="calibre11">3.5 Interlinking Linked Data</span></h1>
+<p class="calibre1"><span>Besides making use of existing vocabularies, the author or maintainer of a dataset should investigate how entities in the dataset can be linked out to entities in other datasets. This follows Linked Data principle number 4 by linking to other URIs so that the user can discover more things. RDF links between entities in different datasets can be specified on two levels: the instance level and the schema level. On the instance level links can be made between individual entities (e.g. people, places, objects) using the properties rdfs:seeAlso and owl:sameAs. The property <i class="calibre8">owl:sameAs</i> is used to express that two URI references actually refer to the same thing. The property <i class="calibre8">rdfs:seeAlso</i> indicates that more relevant information can be found by following the link.</span></p>
+<p class="calibre1"><span>In MusicBrainz the property owl:sameAs is used to connect resources referring to the same music artist. The property rdfs:seeAlso is used to connect albums produced by artists. The reason rdfs:seeAlso is used instead of owl:sameAs is that a URI may refer to a particular release of an album (such as the US rather than UK release). It would be incorrect to express that an express an owl:sameAs relationship between them as they may differ in terms of release date and geographical market. They may also differ in other ways such as their track listings and album covers. An approach to modelling different album releases and their characteristics will be described in section 3.7.2.</span></p>
+<p class="calibre1"><span>On the schema level, which contains the vocabulary used to classify the instance-level items, a number of relationships can be expressed using RDFS, OWL and the SKOS Mapping vocabulary. The RDFS properties rdfs:subPropertyOf and rdfs:subClassOf can be used to declare relationships between two properties or two classes from different vocabularies.</span></p>
+<p class="calibre1"><span>As described in chapter 2, OWL also provides predicates for stating that two classes, or two properties, have the same meaning, as follows:</span></p>
+<p class="calibre1"><span>mo:MusicArtist owl:equivalentClass ex:musician .</span></p>
+<p class="calibre1"><span>foaf:made owl:equivalentProperty ex:creatorOf .</span></p>
+<p class="calibre1"><span>The first of these triples means that all instances of one of these classes are also instances of the other. The second of these triples means that if two resources are connected by one of the properties then they are also connected by the other property. SKOS mapping properties can also be used to express alignment between concepts from different vocabularies. These will be discussed later in the section.</span></p>
+<p class="calibre1"><span>The process of detecting links between datasets is known as <i class="calibre8">link discovery</i>. Datasets are <i class="calibre8">heterogeneous</i> in terms of their vocabularies, format and data representation. This makes the process of link discovery far more complex. Determining whether two entities from different datasets refer to the same thing is an example of what is know as the <i class="calibre8">entity resolution problem</i>. Two types of ambiguity can make the process more challenging. <i class="calibre8">Name ambiguities</i> can result from typos, or the use of different languages or homonyms to describe a thing. <i class="calibre8">Structural ambiguities</i> result from entities having possibly inconsistent relationships to other entities in their respective datasets. These are resolved using ontology and schema matching techniques.</span></p>
+<p class="calibre1"><span>Mappings between datasets (either on the instance or schema level) can be discovered and expressed both manually and automatically. The manual comparison of pairs of entities from different datasets is impractical for larger datasets. SILK is a tool that can be used to discover and express relationships between datasets. This is will be described in section 3.7.4.</span></p>
+<p class="calibre1"><span><i class="calibre8">SKOS (Simple Knowledge Organisation System)</i> is a data model for expressing and linking Knowledge Organisation Systems such as thesauri, taxonomies, and classification schemes [12]. SKOS is expressed as RDF triples. Here will we consider three SKOS mapping properties in particular: </span></p>
+<ul class="calibre3">
+	<li class="calibre4">
+		<span>skos:closeMatch expresses that two concepts are sufficiently similar that they could possibly be used interchangeably </span></li>
+	<li class="calibre4">
+		<span>skos:exactMatch expresses that two concepts can be used interchangeably. This property is transitive.</span></li>
+	<li class="calibre4">
+		<span>skos:relatedMatch expresses that there is an associative mapping between the two concepts</span></li>
+</ul>
+<p class="calibre1"><span>We will now give some examples that make use of the following prefixes.</span></p>
+<p class="calibre1"><span>@prefix mo: &lt;<a href="http://purl.org/ontology/mo/"><span>http://purl.org/ontology/mo/</span></a>&gt;</span></p>
+<p class="calibre1"><span>@prefix dbpedia-ont: &lt;<a href="http://dbpedia.org/ontology/"><span>http://dbpedia.org/ontology/</span></a>&gt;</span></p>
+<p class="calibre1"><span>@prefix schema: &lt;<a href="http://schema.org/"><span>http://schema.org/</span></a>&gt;</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>The example below expresses that the concept MusicArtist from the Music Ontology is an exact match for MusicalArtist from the DBpedia ontology.</span></p>
+<p class="calibre1"><span>mo:MusicArtist skos:exactMatch dbpedia-ont:MusicalArtist.</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>Here are some other examples:</span></p>
+<p class="calibre1"><span>mo:MusicGroup skos:exactMatch dbpedia-ont:Band.</span></p>
+<p class="calibre1"><span>mo:MusicGroup skos:exactMatch schema:MusicGroup.</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>The following triples express that the concept SignalGroup (meaning the group of musical or audio signals captured in a recording session) from the Music Ontology is a close match for both the MusicAlbum concept from schema.org and the Album concept from DBpedia.</span></p>
+<p class="calibre1"><span>mo:SignalGroup skos:closeMatch schema:MusicAlbum.</span></p>
+<p class="calibre1"><span>mo:SignalGroup skos:closeMatch dbpedia-ont:Album.</span></p>
+<p class="calibre1"> </p>
+<p class="calibre1"><span>Certain integrity conditions apply in order to ensure a consistent mapping between two vocabularies. Two concepts cannot be both a related and exact match. The properties skos:closeMatch, skos:relatedMatch and skos:exactMatch are all symmetric. Only skos:exactMatch is transitive.</span></p>
+<p class="calibre1"><span><img src="image012.png" alt="" class="calibre34"/></span></p>
+<p class="calibre1"><em class="calibre8">Figure 6: Partial Mapping Relation diagram with integrity conditions.</em></p>
+</body></html>
