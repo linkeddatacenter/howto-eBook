@@ -17,7 +17,7 @@ There are many resources about Linked Data and semantic web technologies. Becaou
 This is a collaborative project, please fill free to add contributions and signal typo and other errors. The  compiled e-book, last version,  can be downloaded by free from the [download area of LinkedData.Center](http://subscriptions.linkeddata.center/downloads) (registration required)
 
 ## License
-This book is derived from the results of the [EU FP7 EUCLID project](http://euclid-project.eu/) of the European Community under the Information and Communication Technologies (ICT) theme of the 7th Framework Programme for Research and Development. This document does not represent the opinion of the original Euclid partners and nor of the European Commission. The European Commission and the Euclid project is not responsible for any use that might be made of its content.
+This book is derived from the results of the [EU FP7 EUCLID project](http://euclid-project.eu/) of the European Community under the Information and Communication Technologies (ICT) theme of the 7th Framework Programme for Research and Development. This document does not represent the opinion of the original Euclid partners and nor of the European Commission. The Eu ropean Commission and the Euclid project is not responsible for any use that might be made of its content.
 
 **Acknowledges**: E. Fagnoni, E. Norton, B. Acosta, M. Maleshkova, M. Domingue, J., Mikroyannidis, A. Mulholland .</p>
 
