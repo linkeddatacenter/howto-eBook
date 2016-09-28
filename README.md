@@ -1,4 +1,4 @@
-WARNING: THIS PROJECT MOVES TO [WIKITOLEARN](https://en.wikitolearn.org/Course:How_to_use_Linked_Data)
+WARNING: THIS PROJECT MOVED TO [WIKITOLEARN](https://en.wikitolearn.org/Course:How_to_use_Linked_Data)
 =========================================================================================================
 
 # How to use Linked Data eBook source
