@@ -1,3 +1,6 @@
+WARNING: THIS PROJECT CONTINUES ON [WIKITOLEARN](https://en.wikitolearn.org/Course:How_to_use_Linked_Data)
+=========================================================================================================
+
 # How to use Linked Data eBook source
 
 Linked Data has established itself as the de facto means for the publication of structured data over the Web, enjoying amazing growth in terms of the number of organizations committing to use its core principles for exposing and interlinking data sets for seamless exchange, integration, and reuse. More and more ICT ventures offer innovative data management services on top of Linked (Open) Data, creating a demand for data practitioners possessing skills and detailed knowledge in this area. Ensuring the availability of such expertise will prove crucial if businesses are to reap the full benefits of these advanced data management technologies, and the know-how accumulated over the past years by researchers, technology enthusiasts and early adopters.
